@@ -10,14 +10,9 @@ namespace gIdeas.Models
 
         #region *** Attributes: nvarchar(256), Required **
         [DataType("nvarchar(256)")]
-        [Required(ErrorMessage ="Role name is required!")]
+        [Required(ErrorMessage ="Category name is required!")]
         #endregion
         public string Name { get; set; }
 
-        /// <summary>
-        /// 1:m relationship with User entity
-        /// User Not Required
-        /// </summary>
-        public ICollection<gUser> Users { get; set; }
     }
 }

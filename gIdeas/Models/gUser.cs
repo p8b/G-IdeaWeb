@@ -40,6 +40,9 @@ namespace gIdeas.Models
         public override string Email { get; set; }
 
         [Required(ErrorMessage ="User must be assigned to a department.")]
-        public gCategory Department { get; set; }
+        public gDepartment Department { get; set; }
+
+        [Required(ErrorMessage ="User must be assigned to a role")]
+        public gRole Role { get; set; }
     }
 }

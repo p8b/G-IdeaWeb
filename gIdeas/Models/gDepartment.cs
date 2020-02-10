@@ -18,6 +18,6 @@ namespace gIdeas.Models
         /// 1:m relationship with User entity
         /// User Not Required
         /// </summary>
-        public ICollection<gCategory> Categories { get; set; }
+        public ICollection<gCategoriesToDepartment> gCategoriesToDepartments { get; set; }
     }
 }

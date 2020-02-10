@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,16 @@ using System.Threading.Tasks;
 
 namespace gIdeas.Models
 {
-    public class gRole : IdentityUserClaim<int>
+    public class gRole
     {
-        #region *** Identity Claim *** 
-        /// <summary>
-        /// This value cannot be set as it is fixed to "Role"
-        /// </summary>
-        [NotMapped]
-        public override string ClaimType { get { return "Role"; } set { } }
-        /// <summary>
-        /// The same as the Role Name
-        /// </summary>
-        [NotMapped]
-        public override string ClaimValue { get { return Name; } set { Name = value; } }
-        #endregion
+        [Key]
+        public int Id { get; set; }
 
+        #region **** Attributes nvarchar(256), Required, StringLength 256 ****
+        [Column(TypeName = "nvarchar(256)")]
+        [Required(ErrorMessage = "Role Name Required")]
+        [StringLength(256, ErrorMessage = "Name must be less than 256 Characters")]
+        #endregion
         public string Name{ get; set; }
     }
 }

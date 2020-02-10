@@ -1,22 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace gIdeas.Models
 {
     public class gAppDbContext : IdentityUserContext<gUser, int, 
-        gRole, 
+        IdentityUserClaim<int>, 
         IdentityUserLogin<int>, 
         IdentityUserToken<int>>
     {
         ///     Properties to access the database tables.
         ///     Here the name of the attribute will be the 
         ///     name of the table in db.
+        public DbSet<gRole> gRoles { get; set; }
+        public DbSet<gCategoriesToDepartment> gCategoriesToDepartments { get; set; }
         public DbSet<gCategory> gCategories { get; set; }
         public DbSet<gDepartment> gDepartments { get; set; }
 
@@ -32,9 +29,20 @@ namespace gIdeas.Models
             #endregion
 
             #region *** Change table names ***
-            builder.Entity<gUser>().ToTable("gUser");
-            builder.Entity<gRole>().ToTable("gRoles");
+            builder.Entity<gUser>().ToTable("gUsers");
+            builder.Entity<IdentityUserClaim<int>>().ToTable("AccessClaims");
             #endregion
+
+            builder.Entity<IdentityUserClaim<int>>().Ignore("Id");
+            builder.Entity<IdentityUserClaim<int>>().HasKey("UserId");
+
+            //builder.Entity<gCategoriesToDepartment>().HasKey(cd => { cd.Category})
+
+            //builder.Entity<gCategoriesToDepartment>(cd =>
+            //{
+            //    cd.HasOne(c => c.Category.id)
+            //    .WithOne (c => c.Id)
+            //});
 
             #region *** Remove unnecessary attributes form IdentityUser class ***
             builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
