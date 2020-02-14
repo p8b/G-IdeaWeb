@@ -11,6 +11,9 @@ namespace gIdeas.Models
 {
     public class gUser: IdentityUser<int>
     {
+        [Key, ForeignKey("Id")]
+        public override int Id { get; set; }
+
         #region **** Attributes nvarchar(256), Required, StringLength 256 ****
         [Column(TypeName = "nvarchar(256)")]
         [Required(ErrorMessage = "Name Required")]
@@ -38,6 +41,8 @@ namespace gIdeas.Models
             ErrorMessage = "Invalid Email")]
         #endregion
         public override string Email { get; set; }
+
+        public ICollection<gIdeas> Ideas { get; set; }
 
         [Required(ErrorMessage ="User must be assigned to a department.")]
         public gDepartment Department { get; set; }

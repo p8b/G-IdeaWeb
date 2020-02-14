@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace gIdeas.Models
 {
-    public class gCategoriesToDepartment
+    public class gCategoriesToIdeas
     {
-        [Key, Column(Order = 1)]
-        [Required(ErrorMessage ="Category needed to create a link with Department")]
+        [Key, Column(Order = 0)]
+        [Required(ErrorMessage = "Category needed to create a link with Idea")]
         public int CategoryId { get; set; }
 
         [Key, Column(Order = 0)]
-        [Required(ErrorMessage ="Department needed to create a link with category")]
-        public int DepartmentId { get; set; }
+        [Required(ErrorMessage = "Idea is needed to create a link with category")]
+        public int IdeaId { get; set; }
     }
 }

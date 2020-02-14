@@ -13,9 +13,16 @@ namespace gIdeas.Models
         ///     Here the name of the attribute will be the 
         ///     name of the table in db.
         public DbSet<gRole> gRoles { get; set; }
-        public DbSet<gCategoriesToDepartment> gCategoriesToDepartments { get; set; }
         public DbSet<gCategory> gCategories { get; set; }
         public DbSet<gDepartment> gDepartments { get; set; }
+        public DbSet<gComments> gComments { get; set; }
+        public DbSet<gDocument> gDocuments { get; set; }
+        public DbSet<gFlaggedIdeas> gFlaggedIdeas { get; set; }
+        public DbSet<gIdeas> gIdeas { get; set; }
+        public DbSet<gVotes> gVotes { get; set; }
+
+        public DbSet<gCategoriesToDepartment> gCategoriesToDepartments { get; set; }
+        public DbSet<gCategoriesToIdeas> gCategoriesToIdeas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -36,16 +43,13 @@ namespace gIdeas.Models
             builder.Entity<IdentityUserClaim<int>>().Ignore("Id");
             builder.Entity<IdentityUserClaim<int>>().HasKey("UserId");
 
-            //builder.Entity<gCategoriesToDepartment>().HasKey(cd => { cd.Category})
-
-            //builder.Entity<gCategoriesToDepartment>(cd =>
-            //{
-            //    cd.HasOne(c => c.Category.id)
-            //    .WithOne (c => c.Id)
-            //});
+            /// Make the composite keys for the link table between the category and department
+            builder.Entity<gCategoriesToDepartment>().HasKey(cd => new { cd.CategoryId, cd.DepartmentId });
+            builder.Entity<gCategoriesToIdeas>().HasKey(ci => new { ci.CategoryId, ci.IdeaId});
+            builder.Entity<gVotes>().HasKey(v => new {v.IdeaId , v.UserId});
 
             #region *** Remove unnecessary attributes form IdentityUser class ***
-            builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
+                builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
             builder.Entity<gUser>().Ignore(u => u.SecurityStamp);
             builder.Entity<gUser>().Ignore(u => u.ConcurrencyStamp);
             builder.Entity<gUser>().Ignore(u => u.LockoutEnabled);
