@@ -1,47 +1,27 @@
-﻿import React from 'react';
-
+﻿/// Navigation menu items for different users
 export const DefaultNav = () => {
     return {
-        type:'DEFAULT_NAV'
-    }
-}
-export const CustomerNav = () => {
-    return {
-        type: 'CUSTOMER_NAV_MENU',
+        type: 'DEFAULT_NAV',
         payload: [
             {
                 id: 0,
-                path: "/Link1",
-                displayName: "Link 1",
-                displayOnRight: false
-
-            },
-            {
-                id: 1,
-                path: "/Link2",
-                displayName: "Link 2",
-                displayOnRight: true
+                path: "/",
+                displayName: "",
 
             }
         ]
-    };
+    }
 }
-export const ManagerNav = () => {
+export const AdminNav = () => {
     return {
-        type: 'MANAGER_NAV_MENU',
+        type: 'ADMIN_NAV',
         payload: [
             {
                 id: 0,
-                path: "/Link1",
-                displayName: <div>Link1</div>,
-                displayOnRight: false
-            },
-            {
-                id: 1,
-                path: "/Link2",
-                displayName: <div>Link2</div>,
-                displayOnRight: true
-            },
+                path: "/",
+                displayName: "Home",
+
+            }
         ]
     };
 }

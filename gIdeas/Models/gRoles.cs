@@ -20,5 +20,12 @@ namespace gIdeas.Models
         [StringLength(256, ErrorMessage = "Name must be less than 256 Characters")]
         #endregion
         public string Name{ get; set; }
+
+        #region **** Attributes: nvarchar(50), Required, StringLength 50, ValidateAccessClaim ****
+        [Column(TypeName = "nvarchar(50)")]
+        [Required(ErrorMessage = "AccessClaimType Name Required")]
+        [StringLength(256, ErrorMessage = "AccessClaimType must be less than 50 Characters")]
+        #endregion
+        public string AccessClaim { get; set; }
     }
 }

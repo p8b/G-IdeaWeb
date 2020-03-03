@@ -1,16 +1,18 @@
-﻿const initState = 
-    [
-        {
-            id: 0,
-            path: "/Lin1",
-            displayName: "Link1",
-            displayOnRight: false
-        }
-    ]
+﻿/// Initial state of a navigation button
+const initState =
+    [{
+        id: 0,
+        path: "/Path",
+        displayName: "",
+    }];
+
+/// Reducer for navigation menu
 const NavMenuReducer = (state = initState, action) => {
     switch (action.type) {
-        case "CUSTOMER_NAV_MENU":
-        case "MANAGER_NAV_MENU":
+        case "ADMIN_NAV":
+        case "QAMANAGER_NAV":
+        case "QACOORDINATOR_NAV":
+        case "STAFF_NAV":
             return action.payload;
         case "DEFAULT_NAV":
             return initState;

@@ -16,36 +16,46 @@ namespace gIdeas
 {
     public class Startup
     {
+
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-        public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Configure ASP.Net pipe-line services
+        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            /// Add anti forgery middle-ware
+            /// Add the anti-forgery service and identify the 
+            /// the header name of the request to identify and
+            /// validate the token
             services.AddAntiforgery(a =>
             {
                 a.HeaderName = "X-AntiForgery-TOKEN";
             });
-
+            /// Add Mvc service to the application
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            /// Get the db connection string from the appsetting.json
+            /// Pass the SQL server connection to the db context
+            /// receive the connection string from the package.json
             services.AddDbContext<gAppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"));
             });
 
-            /// Setup EF core context and identity
+            //**** Setup Identity options with custom user Class
             services.AddIdentityCore<gUser>(options =>
             {
-                options.ClaimsIdentity.UserIdClaimType = gAppConst._ClaimUserId;
-                options.ClaimsIdentity.RoleClaimType = gAppConst._ClaimRole;
+                /// Modify claim object accessors 
+                options.ClaimsIdentity.UserIdClaimType = "UserId";
+                options.ClaimsIdentity.SecurityStampClaimType = "SecurityStamp";
+                options.ClaimsIdentity.RoleClaimType = gAppConst.AccessClaims.Type;
+                /// Specify that the user's email address must be unique
                 options.User.RequireUniqueEmail = true;
-                options.Password = gAppConst._PasswordOptions;
+                /// Set the password option for the user
+                options.Password = gAppConst.PasswordOptions;
             })
             .AddEntityFrameworkStores<gAppDbContext>()// Add the db context or custom one
             .AddSignInManager<SignInManager<gUser>>()
@@ -70,38 +80,29 @@ namespace gIdeas
             // Add Authorization policies for users.
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(gAppConst._Admin, policy =>
+                options.AddPolicy(gAppConst.AccessClaims.Admin, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst._Admin });
+                    policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.Admin });
                 });
-                options.AddPolicy(gAppConst._QAManager, policy =>
+                options.AddPolicy(gAppConst.AccessClaims.QAManager, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst._QAManager });
+                    policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.QAManager });
                 });
-                options.AddPolicy(gAppConst._QACoordinator, policy =>
+                options.AddPolicy(gAppConst.AccessClaims.QACoordinator, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst._QACoordinator });
+                    policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.QACoordinator });
                 });
-                options.AddPolicy(gAppConst._Staff, policy =>
+                options.AddPolicy(gAppConst.AccessClaims.Staff, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst._Staff });
-                });
-                options.AddPolicy(gAppConst._All, policy =>
-                {
-                    policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst._Staff, 
-                                                               gAppConst._QACoordinator,
-                                                               gAppConst._QAManager,
-                                                               gAppConst._Admin});
+                    policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.Staff });
                 });
             });
 
@@ -147,6 +148,9 @@ namespace gIdeas
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            /// User MVC Routes for the api calls
+            app.UseMvc();
+
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
@@ -155,6 +159,7 @@ namespace gIdeas
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
         }
     }
 }

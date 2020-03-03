@@ -3,13 +3,23 @@ namespace gIdeas
 {
     public class gAppConst
     {
-        #region **** System Roles ****
-        internal const string _Admin = "Admin";
-        internal const string _QAManager = "QA Manager";
-        internal const string _QACoordinator = "QA Coordinator";
-        internal const string _Staff = "Staff";
-        internal const string _All = "All";
-        #endregion
+        /// <summary>
+        /// Three Levels of access within the system.<br /> 
+        /// * Admin<br/>
+        /// * Manager<br/> 
+        /// * Staff<br/> 
+        /// * Customer  
+        /// </summary>
+        public struct AccessClaims
+        {
+            public const string Type = "Role";
+            public const string Admin = "Admin";
+            public const string QAManager = "QAManager";
+            public const string QACoordinator = "QACoordinator";
+            public const string Staff = "Staff";
+            public static readonly string[] All =
+                { Admin, QAManager, QACoordinator, Staff };
+        }
 
         #region **** Claim Identifiers ****
         internal const string _ClaimUserId = "UserId";
@@ -21,7 +31,7 @@ namespace gIdeas
         #endregion
 
         #region **** Password Requirement ****
-        internal static PasswordOptions _PasswordOptions
+        internal static PasswordOptions PasswordOptions
         {
             get
             {

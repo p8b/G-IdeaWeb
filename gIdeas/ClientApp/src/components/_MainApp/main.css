@@ -1,84 +1,162 @@
-﻿body {
+﻿
+/*** General ***/
+*:focus{
+    outline:none !important;
+}
+body {
     /* Margin bottom by footer height */
     padding-bottom: 6rem;
     position: relative;
     min-height: 100vh;
-    background-color: rgba(255, 255, 255, 0.60);
-    /*font-family: 'Noto Sans', sans-serif;*/
-    font-family: 'Varela Round', sans-serif;
+    background-color: rgb(246, 246, 246);
+    font-family: "Lato", Helvetica, Arial, sans-serif;
 }
-
-.footer {
-    position: absolute;
-    border-bottom: 0;
-    /*min-height: 20vh;*/
-    width: 100%;
-    bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-    white-space: nowrap;
-    /* Set the fixed height of the footer here */
-    /*line-height: 60px; /* Vertically center the text there /*/
-    background-color: rgba(61, 95, 9,0.50);
-    background-size: cover;
-}
-
-    .footer ul {
-        list-style-type: none;
-    }
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
-}
-
-.navbar {
-    box-shadow: 0 0 0 0.6rem rgba(255, 255, 255, 0.75) !important;
-}
-
 html {
     font-size: 14px;
 }
-
 @media (min-width: 768px) {
     html {
         font-size: 16px;
     }
 }
-
-.text-nav {
-    color: rgba(61, 95, 9,0.75) !important;
-    font-weight: bold;
-    text-align: center center;
-    transition: 1s;
+.footer {
+    position: absolute;
+    width:100%;
+    bottom: 0;
+    margin-left:0;
+    margin-right:0;
+    background-color: rgb(46, 46, 46);
+    text-decoration-color: white;
+    padding-top: 3rem;
 }
 
-    .text-nav:hover, text-nav:focus {
-        color: rgba(61, 95, 9, 0.50) !important;
-        overflow: visible;
-        transition: 1s;
+.link-style {
+    color: rgb(98, 116, 203) !important;
+}
+    .link-style:hover {
+        color: rgb(37, 47, 96) !important;
+    }
+.top-bar{
+    background-color:rgb(62, 62, 62);
+}
+.top-bar-txt {
+    color: white;
+    font-size: 12.8px;
+    font-family: 'Work Sans',sans-serif;
+}
+
+.top-bar-innertxt, .top-bar-innertxt:hover {
+    color: white;
+    font-weight: 500;
+    line-height: 20px;
+}
+.top-bar-logout-link {
+    color: rgb(240, 255, 250);
+    background-color: rgb(96, 110, 178);
+    font-weight: 500;
+    padding: 5px 9px;
+    margin-left:5px;
+    line-height: 20px;
+}
+    .top-bar-logout-link:hover {
+        color: rgb(96, 110, 178);
+        font-weight: 500;
+        background-color: white;
     }
 
+/*** Navigation Elements ***/
+.logo {
+    width: 199px;
+}
+.navbar {
+    background-color: white;
+    box-shadow: 0 0 0 0.1rem rgb(204, 204, 204) !important;
+}
+.nav-item {
+    border: none;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-radius: 0;
+    color: rgb(96, 110, 178);
+    margin: 0;
+    font-weight: 400;
+    border-width:0;
+}
+@media (min-width:575px) {
+    .nav-item:focus, .nav-item:hover {
+        background-color: rgb(46, 46, 46);
+        color: white;
+        border-color: transparent;
+        border-width:0;
+    }
+}
+@media (max-width:575px) {
+    .nav-item {
+        padding: 0;
+        text-align: left;
+        border-top: solid;
+        border-top-width: 0.01rem;
+        border-top-color: rgb(204, 204, 204);
+        overflow: visible;
+        padding-left: 0.9rem;
+        padding-top: 0.7rem;
+        padding-bottom: 0.7rem;
+        font-size: medium;
+        font-weight: 500;
+        letter-spacing: 0.05rem;
+    }
+}
+.menu-toggler {
+    border: none;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-radius: 0;
+    margin-right: 1rem;
+    font-size: medium;
+}
+    .menu-toggler:focus, .menu-toggler:hover {
+        background-color: rgb(62, 62, 62);
+        color: white;
+    }
+
+/*** Text Styles ***/
 @media (min-width:760px) {
     .word-break {
         max-width: 125px;
     }
 }
-
+.text-underline {
+    text-decoration-line: underline;
+}
+.white-underline {
+    border-bottom: 0.2rem solid white;
+    width: 80%;
+}
+.page-header {
+    font-family: "Antonio", Verdana, sans-serif;
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1.1;
+    text-rendering: optimizelegibility;
+    margin-top:2rem;
+    margin-bottom:2rem;
+}
+.txt-gray {
+    color: rgb(157, 157, 157);
+}
+/*** List Styles ***/
 .no-list-style {
     list-style-type: none;
 }
 
-.text-underline {
-    text-decoration-line: underline;
+/*** Other Styles ***/
+.padding-0 {
+    padding: 0;
+    bottom: 0;
+    top: 0;
 }
-
-@media (max-width:575px) {
-    .dropdown-span {
-        background-color: transparent;
-        border: none;
-    }
+.m-shadow-box {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.58);
 }
-
-
-

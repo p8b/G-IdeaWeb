@@ -9,8 +9,8 @@ using gIdeas.Models;
 namespace gIdeas.Migrations
 {
     [DbContext(typeof(gAppDbContext))]
-    [Migration("20200214034241_init")]
-    partial class init
+    [Migration("20200214134352_i")]
+    partial class i
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
