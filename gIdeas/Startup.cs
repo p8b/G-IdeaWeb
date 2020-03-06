@@ -80,29 +80,35 @@ namespace gIdeas
             // Add Authorization policies for users.
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(gAppConst.AccessClaims.Admin, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelOne, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.Admin });
                 });
-                options.AddPolicy(gAppConst.AccessClaims.QAManager, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelTwo, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.QAManager });
+                    policy.RequireClaim("Role", new string[] {gAppConst.AccessClaims.Admin,
+                                                              gAppConst.AccessClaims.QAManager }) ;
                 });
-                options.AddPolicy(gAppConst.AccessClaims.QACoordinator, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelThree, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.QACoordinator });
+                    policy.RequireClaim("Role", new string[] {gAppConst.AccessClaims.Admin,
+                                                              gAppConst.AccessClaims.QAManager,
+                                                              gAppConst.AccessClaims.QACoordinator }) ;
                 });
-                options.AddPolicy(gAppConst.AccessClaims.Staff, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelFour, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.Staff });
+                    policy.RequireClaim("Role", new string[] {gAppConst.AccessClaims.Admin,
+                                                              gAppConst.AccessClaims.QAManager,
+                                                              gAppConst.AccessClaims.QACoordinator,
+                                                              gAppConst.AccessClaims.Staff }) ;
                 });
             });
 

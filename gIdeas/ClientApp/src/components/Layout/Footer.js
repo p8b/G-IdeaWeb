@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 /// connect method from react redux in order to
 // connect the component to redux state
 import { connect } from 'react-redux';
+
 /// This component is used to combine the required actions
 // and reducers to be connected to the current component
 import { bindActionCreators } from 'redux';
+
 class Footer extends Component {
     constructor(props) {
         super(props);

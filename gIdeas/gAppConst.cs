@@ -21,6 +21,29 @@ namespace gIdeas
                 { Admin, QAManager, QACoordinator, Staff };
         }
 
+        /// <summary>
+        /// Four Levels of access policies within the system.<br /> 
+        /// </summary>
+        public struct AccessPolicies
+        {
+            /// <summary>
+            /// * Level One includes Admin
+            /// </summary>
+            public const string AccessLevelOne = "AccessLevelOne";
+            /// <summary>
+            /// * Level Two includes Admin and QA Manager  <br/>
+            /// </summary>
+            public const string AccessLevelTwo = "AccessLevelTwo";
+            /// <summary>
+            /// * Level Three includes Admin, QA Manager and QA Coordinator <br/>
+            /// </summary>
+            public const string AccessLevelThree = "AccessLevelThree";
+            /// <summary>
+            /// * Level Three includes Admin, QA Manager, QA Coordinator and Staff <br/>
+            /// </summary>
+            public const string AccessLevelFour = "AccessLevelFour";
+        }
+
         #region **** Claim Identifiers ****
         internal const string _ClaimUserId = "UserId";
         internal const string _ClaimRole = "Role";
