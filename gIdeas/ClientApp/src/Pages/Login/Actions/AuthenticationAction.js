@@ -1,12 +1,12 @@
 ﻿import { getCookieValue } from './../../../components/_MainApp/appConst'
 
-export const authenticate = (loginDetails = { email: "", password: "" }) => {
+export const authenticate = (loginDetails = { email: "", password: "", rememberMe: false }) => {
     return async dispatch => {
         let state = {
             type:"LOGIN",
             payload: {
                 isAuthenticated: false,
-                message: "",
+                errors: [],
                 accessClaim: ""
             }
         };
@@ -15,7 +15,7 @@ export const authenticate = (loginDetails = { email: "", password: "" }) => {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                //'X-AntiForgery-TOKEN': getCookieValue("AntiForgery-TOKEN"),
+                'X-AntiForgery-TOKEN': getCookieValue("AntiForgery-TOKEN"),
             },
             body: JSON.stringify(loginDetails),
         }).catch(err => console.log(err));
@@ -25,15 +25,15 @@ export const authenticate = (loginDetails = { email: "", password: "" }) => {
                 await response.json().then(data => {
                     state.payload.isAuthenticated = true;
                     state.payload.accessClaim = data.accessClaim;
-                    state.payload.message = "";
                 });
                 break;
             case 400: /// "bad request" response 
                 await response.json().then(data => {
-                    state.payload.isAuthenticated = false;
-                    state.payload.accessClaim = "";
-                    state.payload.message = data.message;
+                    state.payload.errors = data;
                 });
+            default:
+                    state.payload.accessClaim = "";
+                    state.payload.isAuthenticated = false;
                 break;
         }
         dispatch(state);
@@ -45,7 +45,7 @@ export const signOut = () => {
             type: "LOGOUT",
             payload: {
                 isAuthenticated: false,
-                message: "",
+                errors: [],
                 accessClaim: ""
             }
         };
@@ -65,7 +65,7 @@ export const silentAuthentication = () => {
             type: 'SILENT_ATHENTICATION',
             payload: {
                 isAuthenticated: false,
-                message: "",
+                errors: [],
                 accessClaim: ""
             }
         };
@@ -76,6 +76,7 @@ export const silentAuthentication = () => {
                     state.payload.isAuthenticated = true;
                     state.payload.accessClaim = data.accessClaim;
                 }).catch(e => { })
+                break;
             case 401: //Unauthorized 
             default:
                 dispatch(state);

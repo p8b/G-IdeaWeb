@@ -12,7 +12,7 @@ namespace gIdeas.Models
 ///  has a FK to the gUsers Model
 /// 
 /// </summary>
-    public class gIdeas
+    public class gIdea
     {
         [Key]
         public int Id { get; set; }
@@ -57,13 +57,13 @@ namespace gIdeas.Models
         public bool DisplayAnonymous { get; set; } = false;
 
         [Required(ErrorMessage ="A user must be assigned to the idea")]
-        public gUser User { get; set; }
+        public gUser Author { get; set; }
 
         public ICollection<gDocument> gDocuments { get; set; }
 
-        public ICollection<gComments> gComments { get; set; }
+        public ICollection<gComment> gComments { get; set; }
 
-        public ICollection<gFlaggedIdeas> gFlaggedIdeas { get; set; }
+        public ICollection<gFlaggedIdea> gFlaggedIdeas { get; set; }
         
         public ICollection<gVotes> gVotes { get; set; }
 

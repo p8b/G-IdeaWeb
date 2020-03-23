@@ -126,3 +126,7 @@ body {
 .error-style, .icofont-warning {
     color: rgb(54, 71, 154) !important;
 }
+
+.zIndex-1000{
+    z-index:1000;
+}

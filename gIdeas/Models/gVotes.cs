@@ -19,6 +19,6 @@ namespace gIdeas.Models
         public string Thumb { get; set; }
 
         [Required(ErrorMessage = "Idea is require for current vote.")]
-        public gIdeas Idea { get; set; }
+        public gIdea Idea { get; set; }
     }
 }

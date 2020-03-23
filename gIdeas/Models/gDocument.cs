@@ -17,6 +17,6 @@ namespace gIdeas.Models
         public string Path { get; set; }
 
         [Required(ErrorMessage = "Idea is required for current document.")]
-        public gIdeas Idea { get; set; }
+        public gIdea Idea { get; set; }
     }
 }

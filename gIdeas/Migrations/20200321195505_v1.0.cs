@@ -3,10 +3,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace gIdeas.Migrations
 {
-    public partial class i : Migration
+    public partial class v10 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "gBrowserInfos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BrowserName = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_gBrowserInfos", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "gCategories",
                 columns: table => new
@@ -40,7 +53,8 @@ namespace gIdeas.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    AccessClaim = table.Column<string>(type: "nvarchar(50)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,6 +159,27 @@ namespace gIdeas.Migrations
                         principalTable: "gUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "gLastLogins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    lastLogin = table.Column<string>(nullable: true),
+                    currentLogin = table.Column<string>(nullable: true),
+                    FK_gUserId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_gLastLogins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_gLastLogins_gUsers_FK_gUserId",
+                        column: x => x.FK_gUserId,
+                        principalTable: "gUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -283,6 +318,11 @@ namespace gIdeas.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_gLastLogins_FK_gUserId",
+                table: "gLastLogins",
+                column: "FK_gUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_gUsers_DepartmentId",
                 table: "gUsers",
                 column: "DepartmentId");
@@ -304,6 +344,9 @@ namespace gIdeas.Migrations
                 name: "AccessClaims");
 
             migrationBuilder.DropTable(
+                name: "gBrowserInfos");
+
+            migrationBuilder.DropTable(
                 name: "gCategoriesToDepartments");
 
             migrationBuilder.DropTable(
@@ -317,6 +360,9 @@ namespace gIdeas.Migrations
 
             migrationBuilder.DropTable(
                 name: "gFlaggedIdeas");
+
+            migrationBuilder.DropTable(
+                name: "gLastLogins");
 
             migrationBuilder.DropTable(
                 name: "gVotes");

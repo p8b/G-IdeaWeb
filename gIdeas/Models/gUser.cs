@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace gIdeas.Models
 {
@@ -16,38 +14,80 @@ namespace gIdeas.Models
 
         #region **** Attributes nvarchar(256), Required, StringLength 256 ****
         [Column(TypeName = "nvarchar(256)")]
-        [Required(ErrorMessage = "Name Required")]
+        [Required(ErrorMessage = "Name is required")]
         [StringLength(256, ErrorMessage = "Name must be less than 256 Characters")]
         #endregion
         public string FirstName { get; set; }
 
-        #region **** Attributes nvarchar(256), Required, StringLength 256 ****
+        #region *** Attributes nvarchar(256), Required, StringLength 256 ***
         [Column(TypeName = "nvarchar(256)")]
-        [Required(ErrorMessage = "Surname Required")]
+        [Required(ErrorMessage = "Surname is required")]
         [StringLength(256, ErrorMessage = "Surname must be less than 256 Characters")]
         #endregion
         public string Surname { get; set; }
 
-        #region **** Attributes DataType.Password, Required ****
+        #region *** Attributes DataType.Password, Required ***
         [DataType(DataType.Password)]
-        [Required(ErrorMessage = "Password Required")]
+        [Required(ErrorMessage = "Password is required")]
+        [JsonIgnore]
         #endregion
         public override string PasswordHash { get; set; }
 
-        #region **** Attributes DataType.EmailAddress, Required, RegularExpression ****
+        #region *** Attributes DataType.EmailAddress, Required, RegularExpression ***
         [DataType(DataType.EmailAddress, ErrorMessage = "Invalid Email")]
-        [Required(ErrorMessage = "Email Required")]
+        [Required(ErrorMessage = "Email is required")]
         [RegularExpression(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
             ErrorMessage = "Invalid Email")]
         #endregion
         public override string Email { get; set; }
 
-        public ICollection<gIdeas> Ideas { get; set; }
-
-        [Required(ErrorMessage ="User must be assigned to a department.")]
+        [Required(ErrorMessage ="Department is required")]
         public gDepartment Department { get; set; }
 
-        [Required(ErrorMessage ="User must be assigned to a role")]
+        [Required(ErrorMessage ="Role is required.")]
         public gRole Role { get; set; }
+
+        public bool IsBlocked { get; set; } = false;
+
+        public ICollection<gIdea> Ideas { get; set; }
+        public ICollection<gComment> Comments { get; set; }
+        public ICollection<gFlaggedIdea> FlaggedIdeas { get; set; }
+        public ICollection<gLoginRecord> loginRecords { get; set; }
+
+        [NotMapped]
+        public DateTime LastLoginDate { get; set; }
+        [NotMapped]
+        public string newPassword { get; set; }
+        [NotMapped]
+        public int TotalNumberOfIdeas { get; set; }
+        [NotMapped]
+        public int TotalNumberOfComments { get; set; }
+
+
+        #region *** Ignored properties in json conversion ***
+
+        [JsonIgnore]
+        public override DateTimeOffset? LockoutEnd { get; set; }
+        [JsonIgnore]
+        public override bool TwoFactorEnabled { get; set; }
+        [JsonIgnore]
+        public override bool PhoneNumberConfirmed { get; set; }
+        [JsonIgnore]
+        public override string ConcurrencyStamp { get; set; }
+        [JsonIgnore]
+        public override string SecurityStamp { get; set; }
+        [JsonIgnore]
+        public override bool EmailConfirmed { get; set; }
+        [JsonIgnore]
+        public override string NormalizedEmail { get; set; }
+        [JsonIgnore]
+        public override string NormalizedUserName { get; set; }
+        [JsonIgnore]
+        public override string UserName { get; set; }
+        [JsonIgnore]
+        public override bool LockoutEnabled { get; set; }
+        [JsonIgnore]
+        public override int AccessFailedCount { get; set; } 
+        #endregion
     }
 }

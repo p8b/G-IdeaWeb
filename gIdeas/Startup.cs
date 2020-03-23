@@ -80,20 +80,20 @@ namespace gIdeas
             // Add Authorization policies for users.
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelOne, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.LevelOne, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("Role", new string[] { gAppConst.AccessClaims.Admin });
                 });
-                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelTwo, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.LevelTwo, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("Role", new string[] {gAppConst.AccessClaims.Admin,
                                                               gAppConst.AccessClaims.QAManager }) ;
                 });
-                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelThree, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.LevelThree, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();
@@ -101,7 +101,7 @@ namespace gIdeas
                                                               gAppConst.AccessClaims.QAManager,
                                                               gAppConst.AccessClaims.QACoordinator }) ;
                 });
-                options.AddPolicy(gAppConst.AccessPolicies.AccessLevelFour, policy =>
+                options.AddPolicy(gAppConst.AccessPolicies.LevelFour, policy =>
                 {
                     policy.AuthenticationSchemes.Add(gAppConst._AuthSchemeApplication);
                     policy.RequireAuthenticatedUser();

@@ -1,6 +1,6 @@
 ﻿const initState = {
     isAuthenticated: false,
-    message: "",
+    errors: [],
     accessClaim: ""
 }
 const AuthenticationReducer = (state = initState, action) => {

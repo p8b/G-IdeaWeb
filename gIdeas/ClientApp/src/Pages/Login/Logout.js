@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux';
 import { Redirect } from "react-router-dom";
 import { signOut } from "./Actions/AuthenticationAction";
 
-
 class Logout extends PureComponent {
     componentDidMount() {
         /// if the user is authenticated then trigger the logout action
@@ -32,4 +31,3 @@ export default connect(
     mapStateToProps,
     dispatch => bindActionCreators(mapDispatchToProps, dispatch)
 )(Logout);
-

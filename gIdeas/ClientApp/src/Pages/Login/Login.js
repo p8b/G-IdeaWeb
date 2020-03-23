@@ -16,7 +16,8 @@ class Login extends PureComponent {
         this.state =
         {
             email: "",
-            password: ""
+            password: "",
+            rememberMe: false
         }
         /// trigger the hide navigation an footer action
         this.props.footerAndNavbarHide();
@@ -38,7 +39,7 @@ class Login extends PureComponent {
                         <div className="container-cell-top login-img-logo-container">
                             <img alt="Greenwich University Logo" className="login-logo-img" src="/Images/GreenwichUni_Logo.png" />
                         </div>
-                        <div className="row container-cell-top ">
+                        <div className="row container-cell-top zIndex-1000 ">
                             <div className="col-12">
                                 {/***** Email Input *****/}
                                 <div className="container-cell-right mt-3">
@@ -47,6 +48,11 @@ class Login extends PureComponent {
                                 {/***** Password Input *****/}
                                 <div className="container-cell-right">
                                     <input className="login-input" type="password" placeholder="Password" onChange={i => this.setState({ password: i.target.value })} />
+                                </div>
+                                {/***** Remember me check-box Input *****/}
+                                <div className="container-cell-right pl-5">
+                                    <input type="checkbox" class="form-check-input" id="rememberMe" onChange={i => i.target.value == "on" ? this.setState({ rememberMe: true }) : this.setState({ rememberMe: false })} />
+                                    <label class="form-check-label" for="rememberMe">Remember Me</label>
                                 </div>
                                 {/***** Login Button *****/}
                                 <div className="container-cell-right">
@@ -58,8 +64,10 @@ class Login extends PureComponent {
                                 <div className="container-cell-right">
                                     {(() => {
                                         // If no error message is to be show do not render warning icon
-                                        if (this.props.Authentication.message != "" && this.props.Authentication.message != undefined)
-                                            return <i className="icofont-warning"></i>;
+                                        if (this.props.Authentication.errors.length != 0)
+                                            this.props.Authentication.errors.map(e => {
+                                                <i key={e.key} className="icofont-warning">{e.value}</i>;
+                                            })
                                     })()}
                                     <i className="error-style"> {this.props.Authentication.message}</i>
                                 </div>

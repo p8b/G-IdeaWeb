@@ -12,17 +12,17 @@ namespace gIdeas.Models
         ///     Properties to access the database tables.
         ///     Here the name of the attribute will be the 
         ///     name of the table in db.
-        public DbSet<gRole> gRoles { get; set; }
-        public DbSet<gCategory> gCategories { get; set; }
-        public DbSet<gDepartment> gDepartments { get; set; }
-        public DbSet<gComments> gComments { get; set; }
-        public DbSet<gDocument> gDocuments { get; set; }
-        public DbSet<gFlaggedIdeas> gFlaggedIdeas { get; set; }
-        public DbSet<gIdeas> gIdeas { get; set; }
-        public DbSet<gVotes> gVotes { get; set; }
+        public DbSet<gRole> Roles { get; set; }
+        public DbSet<gCategoryTag> Categories { get; set; }
+        public DbSet<gDepartment> Departments { get; set; }
+        public DbSet<gComment> Comments { get; set; }
+        public DbSet<gDocument> Documents { get; set; }
+        public DbSet<gFlaggedIdea> FlaggedIdeas { get; set; }
+        public DbSet<gIdea> Ideas { get; set; }
+        public DbSet<gVotes> Votes { get; set; }
+        public DbSet<gLoginRecord> LoginRecords { get; set; }
 
-        public DbSet<gCategoriesToDepartment> gCategoriesToDepartments { get; set; }
-        public DbSet<gCategoriesToIdeas> gCategoriesToIdeas { get; set; }
+        public DbSet<gCategoriesToIdeas> CategoriesToIdeas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -44,12 +44,11 @@ namespace gIdeas.Models
             builder.Entity<IdentityUserClaim<int>>().HasKey("UserId");
 
             /// Make the composite keys for the link table between the category and department
-            builder.Entity<gCategoriesToDepartment>().HasKey(cd => new { cd.CategoryId, cd.DepartmentId });
             builder.Entity<gCategoriesToIdeas>().HasKey(ci => new { ci.CategoryId, ci.IdeaId});
             builder.Entity<gVotes>().HasKey(v => new {v.IdeaId , v.UserId});
 
             #region *** Remove unnecessary attributes form IdentityUser class ***
-                builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
+            builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
             builder.Entity<gUser>().Ignore(u => u.SecurityStamp);
             builder.Entity<gUser>().Ignore(u => u.ConcurrencyStamp);
             builder.Entity<gUser>().Ignore(u => u.LockoutEnabled);
