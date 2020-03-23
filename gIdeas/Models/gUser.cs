@@ -51,7 +51,7 @@ namespace gIdeas.Models
 
         public ICollection<gIdea> Ideas { get; set; }
         public ICollection<gComment> Comments { get; set; }
-        public ICollection<gFlaggedIdea> FlaggedIdeas { get; set; }
+        public ICollection<FlaggedIdea> FlaggedIdeas { get; set; }
         public ICollection<gLoginRecord> loginRecords { get; set; }
 
         [NotMapped]

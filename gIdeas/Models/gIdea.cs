@@ -63,7 +63,7 @@ namespace gIdeas.Models
 
         public ICollection<gComment> gComments { get; set; }
 
-        public ICollection<gFlaggedIdea> gFlaggedIdeas { get; set; }
+        public ICollection<FlaggedIdea> gFlaggedIdeas { get; set; }
         
         public ICollection<gVotes> gVotes { get; set; }
 

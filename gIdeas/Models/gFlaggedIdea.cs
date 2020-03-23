@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace gIdeas.Models
 {
-    public class gFlaggedIdea
+    public class FlaggedIdea
     {
         [Key]
         public int Id { get; set; }
@@ -17,6 +17,6 @@ namespace gIdeas.Models
         public gIdea Idea { get; set; }
 
         [Required(ErrorMessage = "User is needed for submitting a flag report.")]
-        public gUser gUsers { get; set; }
+        public gUser Users { get; set; }
     }
 }

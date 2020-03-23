@@ -19,7 +19,6 @@ namespace gIdeas.Models
         [Required(ErrorMessage ="Idea is require for commenting")]
         public gIdea Idea { get; set; }
 
-        [Required(ErrorMessage ="User is require for commenting.")]
         public gUser User { get; set; }
 
         [Column(TypeName = "nvarchar(30)")]

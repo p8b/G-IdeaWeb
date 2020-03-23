@@ -62,7 +62,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
         [Authorize(gAppConst.AccessPolicies.LevelFour)]
-        public async Task<IActionResult> Post([FromBody] gFlaggedIdea newflaggedIdea)
+        public async Task<IActionResult> Post([FromBody] FlaggedIdea newflaggedIdea)
         {
             /// if model validation failed
             if (!TryValidateModel(newflaggedIdea))
@@ -74,7 +74,7 @@ namespace gIdeas.Controllers
 
             /// check the database if the same user has already posted flag with the same type
             if (DbContext.FlaggedIdeas.Any(f => f.Type == newflaggedIdea.Type 
-                                              && f.gUsers.Id == newflaggedIdea.gUsers.Id))
+                                              && f.Users.Id == newflaggedIdea.Users.Id))
             {
                 /// extract the errors and return bad request containing the errors
                 gAppConst.Error(ref ErrorsList, "Request already received.");
@@ -108,7 +108,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        public async Task<IActionResult> Delete([FromBody] gFlaggedIdea flaggedIdea)
+        public async Task<IActionResult> Delete([FromBody] FlaggedIdea flaggedIdea)
         {
             /// if the FlaggedIdeas record with the same id is not found
             if (!DbContext.FlaggedIdeas.Any(f => f.Id == flaggedIdea.Id))

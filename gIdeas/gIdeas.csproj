@@ -22,6 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200323065634_v0.2.cs" />
+    <Compile Remove="Migrations\20200323065634_v0.2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="ClientApp\src\ReduxStore\Pages\" />
   </ItemGroup>
 
