@@ -65,6 +65,7 @@ namespace gIdeas.Models
 
         public ICollection<FlaggedIdea> gFlaggedIdeas { get; set; }
         
+        [ForeignKey("IdeaId"), Column(Order = 0)]
         public ICollection<gVotes> gVotes { get; set; }
 
         [ForeignKey("IdeaId"), Column(Order = 0)]

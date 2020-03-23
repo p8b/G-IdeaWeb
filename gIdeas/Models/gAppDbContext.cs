@@ -21,6 +21,8 @@ namespace gIdeas.Models
         public DbSet<gIdea> Ideas { get; set; }
         public DbSet<gVotes> Votes { get; set; }
         public DbSet<gLoginRecord> LoginRecords { get; set; }
+        public DbSet<gClosureDates> ClosureDates { get; set; }
+        public DbSet<gPageView> PageViews { get; set; }
 
         public DbSet<gCategoriesToIdeas> CategoriesToIdeas { get; set; }
 
@@ -36,7 +38,7 @@ namespace gIdeas.Models
             #endregion
 
             #region *** Change table names ***
-            builder.Entity<gUser>().ToTable("gUsers");
+            builder.Entity<gUser>().ToTable("Users");
             builder.Entity<IdentityUserClaim<int>>().ToTable("AccessClaims");
             #endregion
 

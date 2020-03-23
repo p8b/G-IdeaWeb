@@ -17,8 +17,5 @@ namespace gIdeas.Models
 
         [DataType("nvarchar(5)")]
         public string Thumb { get; set; }
-
-        [Required(ErrorMessage = "Idea is require for current vote.")]
-        public gIdea Idea { get; set; }
     }
 }
