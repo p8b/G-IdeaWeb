@@ -59,16 +59,15 @@ class Login extends PureComponent {
                                     <button type="submit" className="login-button" onClick={() => this.props.authenticate(this.state)}>Log In</button>
                                 </div>
                             </div>
-                            {/***** Error display container *****/}
+                            {/***** Error display container ****/}
                             <div className="col-12">
                                 <div className="container-cell-right">
-                                    {(() => {
-                                        // If no error message is to be show do not render warning icon
-                                        if (this.props.Authentication.errors.length != 0)
+                                    {// If no error message is to be show do not render warning icon
+                                        this.props.Authentication.errors.length != 0 &&
                                             this.props.Authentication.errors.map(e => {
-                                                <i key={e.key} className="icofont-warning">{e.value}</i>;
+                                                return <i key={e.key} className="icofont-warning">{e.value}</i>;
                                             })
-                                    })()}
+                                    }
                                     <i className="error-style"> {this.props.Authentication.message}</i>
                                 </div>
                             </div>

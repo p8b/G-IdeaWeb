@@ -42,7 +42,7 @@ namespace gIdeas
             /// receive the connection string from the package.json
             services.AddDbContext<gAppDbContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("MainConnection"));
             });
 
             //**** Setup Identity options with custom user Class
