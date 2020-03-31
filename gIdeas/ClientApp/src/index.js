@@ -1,9 +1,9 @@
 ///*** import required CSS Files
 import 'bootstrap/dist/css/bootstrap.css';
-import '../src/components/_MainApp/main.css';
-import '../src/components/_MainApp/fonts/Antonio/stylesheet.css';
+import '../src/components/_MainApp/Styles/main.css';
+import '../src/components/_MainApp/Styles/fonts/Antonio/stylesheet.css';
 //import '../src/components/_MainApp/fonts.css';
-import '../src/components/_MainApp/icofont.css';
+import '../src/components/_MainApp/Styles/icofont.css';
 
 ///*** Import React and required components
 import React from 'react';

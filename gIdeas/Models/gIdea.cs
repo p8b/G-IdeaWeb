@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace gIdeas.Models
 {/// <summary>
@@ -46,30 +48,43 @@ namespace gIdeas.Models
         [Column(TypeName = "nvarchar(30)")]
         [DataType(DataType.DateTime)]
         #endregion
-        public DateTime CloseDate { get; set; }
+        public DateTime FirstClosureDate { get; set; }
 
         #region **** Attributes: nvarchar(30), Required ***
         [Column(TypeName = "nvarchar(30)")]
         [DataType(DataType.DateTime)]
         #endregion
-        public DateTime FinalClosureDate { get; set; }
+        public DateTime ClosureDate { get; set; }
 
-        public bool DisplayAnonymous { get; set; } = false;
+        public bool IsAnonymous { get; set; } = false;
+
+        public int ViewCount { get; set; }
 
         [Required(ErrorMessage ="A user must be assigned to the idea")]
         public gUser Author { get; set; }
 
-        public ICollection<gDocument> gDocuments { get; set; }
+        [ForeignKey("IdeaId")]
+        public List<gDocument> Documents { get; set; }
 
-        public ICollection<gComment> gComments { get; set; }
+        [JsonIgnore]
+        public bool IsBlocked { get; set; } = false;
 
-        public ICollection<FlaggedIdea> gFlaggedIdeas { get; set; }
+        [ForeignKey("IdeaId"), Column(Order = 0)]
+        public ICollection<gComment> Comments { get; set; }
+
+        [ForeignKey("IdeaId"), Column(Order = 0)]
+        public ICollection<gFlaggedIdea> FlaggedIdeas { get; set; }
         
         [ForeignKey("IdeaId"), Column(Order = 0)]
-        public ICollection<gVotes> gVotes { get; set; }
+        [JsonIgnore]
+        public ICollection<gVotes> Votes { get; set; }
 
         [ForeignKey("IdeaId"), Column(Order = 0)]
-        public ICollection<gCategoriesToIdeas> gCategoriesToIdeas { get; set; }
+        public ICollection<gCategoriesToIdeas> CategoriesToIdeas { get; set; }
 
+        [NotMapped]
+        public int TotalThumbUps { get; set; }
+        [NotMapped]
+        public int TotalThumbDowns { get; set; }
     }
 }

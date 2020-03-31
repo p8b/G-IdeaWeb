@@ -6,15 +6,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 
 /// Reducer imports
-import NavMenuReducer from './Layout/NavMenuReducer';
-import AuthenticationReducer from './Authentication/AuthenticationReducer';
-import NavAndFooterVisibilityReducer from './Layout/NavAndFooterVisibilityReducer';
+import AuthenticationReducer from './AuthenticationReducer';
 
 /// Combining all the reducers to be added to redux store
 const allReducers = combineReducers(
     {
-        NavMenu: NavMenuReducer,
-        NavAndFooterVisibility: NavAndFooterVisibilityReducer,
         Authentication: AuthenticationReducer,
     });
 

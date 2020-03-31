@@ -7,7 +7,7 @@ namespace gIdeas.Models
     public class gClosureDates
     {
         [Key]
-        public int Id { get; set; }
+        public int Year { get; set; }
 
         [Required]
         public int FirstClosure { get; set; }
@@ -17,6 +17,6 @@ namespace gIdeas.Models
 
         [Column(TypeName = "nvarchar(30)")]
         [DataType(DataType.DateTime)]
-        public DateTime TimeStampLastModified { get; set; } = new DateTime();
+        public DateTime TimeStampLastModified { get; set; } = DateTime.UtcNow;
     }
 }

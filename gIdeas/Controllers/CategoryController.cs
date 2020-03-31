@@ -29,11 +29,12 @@ namespace gIdeas.Controllers
         /// Used to get a list of all categories
         /// </summary>
         #region *** 200 OK, 400 BadRequest ***
+        [HttpGet("[action]")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [HttpGet("[action]")]
+        [Authorize(gAppConst.AccessPolicies.LevelFour)]  /// Done
         public IActionResult Get()
         {
             try
@@ -52,13 +53,13 @@ namespace gIdeas.Controllers
         /// <summary>
         ///     Create a new Category
         /// </summary>
-        #region *** 201 Created, 400 BadRequest, Authorize Admin ***
+        #region *** 201 Created, 400 BadRequest ***
         [HttpPost("[action]")]
-        //[Authorize(gAppConst.AccessClaims.Admin)]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
+        [Authorize(gAppConst.AccessPolicies.LevelTwo)]  /// Done
         public async Task<IActionResult> Post([FromBody] gCategoryTag newCategory)
         {
             try
@@ -98,75 +99,36 @@ namespace gIdeas.Controllers
         }
 
         /// <summary>
-        ///     Update Category
+        /// Delete Category
         /// </summary>
-        #region *** 200 Ok, 400 BadRequest, Authorize Admin ***
-        [HttpPut("[action]")]
-        //[Authorize(gAppConst.AccessClaims.Admin)]
+        #region *** 200 Ok, 400 BadRequest ***
+        [HttpDelete("[action]")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        public async Task<IActionResult> Put([FromBody] gCategoryTag modifiedCategory)
+        [Authorize(gAppConst.AccessPolicies.LevelTwo)]  /// Done
+        public async Task<IActionResult> Delete([FromBody] gCategoryTag category)
         {
             try
             {
-                /// Try to validate the model and if it failed
-                if (!TryValidateModel(modifiedCategory))
-                {
-                    /// extract the errors and return bad request containing the errors
-                    gAppConst.ExtractErrors(ModelState, ref ErrorsList);
-                    return BadRequest(ErrorsList);
-                }
-
                 /// if the Category record with the same id is not found
-                if (!DbContext.Categories.Any(d => d.Id == modifiedCategory.Id))
+                if (!DbContext.Categories.Any(d => d.Id == category.Id))
                 {
                     gAppConst.Error(ref ErrorsList, "Category not found");
                     return BadRequest(ErrorsList);
                 }
 
-                /// else department object has no errors
-                /// thus update department in the context
-                DbContext.Categories.Update(modifiedCategory);
+                /// If the category is in use by any idea then do not allow delete
+                if (DbContext.CategoriesToIdeas.Any(c => c.CategoryId == category.Id))
+                {
+                    gAppConst.Error(ref ErrorsList, "Category tag is in use by an idea.");
+                    return BadRequest(ErrorsList);
+                }
 
-                /// save the changes to the database
-                await DbContext.SaveChangesAsync().ConfigureAwait(false);
-                /// thus return 200 ok status with the updated object
-                return Ok(modifiedCategory);
-            }
-            catch (Exception) // DbUpdateException, DbUpdateConcurrencyException
-            {
-                /// Add the error below to the error list and return bad request
-                gAppConst.Error(ref ErrorsList, $"Server Error. Please Contact Administrator.");
-                return BadRequest(ErrorsList);
-            }
-        }
-
-        /// <summary>
-        /// Delete Category
-        /// </summary>
-        #region *** 200 Ok, 400 BadRequest, Authorize Admin ***
-        [HttpDelete("[action]")]
-        // [Authorize(gAppConst.AccessClaims.Admin)]
-        [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        #endregion
-        public async Task<IActionResult> Delete([FromBody] gCategoryTag category)
-        {
-            /// if the Category record with the same id is not found
-            if (!DbContext.Categories.Any(d => d.Id == category.Id))
-            {
-                gAppConst.Error(ref ErrorsList, "Category not found");
-                return BadRequest(ErrorsList);
-            }
-
-            /// else the Category is found
-            /// now delete the Category record
-            DbContext.Categories.Remove(category);
-            try
-            {
+                /// else the Category is found
+                /// now delete the Category record
+                DbContext.Categories.Remove(category);
                 /// save the changes to the database
                 await DbContext.SaveChangesAsync().ConfigureAwait(false);
                 /// return 200 Ok status

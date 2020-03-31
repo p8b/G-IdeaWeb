@@ -17,7 +17,7 @@ namespace gIdeas.Models
         public DbSet<gDepartment> Departments { get; set; }
         public DbSet<gComment> Comments { get; set; }
         public DbSet<gDocument> Documents { get; set; }
-        public DbSet<FlaggedIdea> FlaggedIdeas { get; set; }
+        public DbSet<gFlaggedIdea> FlaggedIdeas { get; set; }
         public DbSet<gIdea> Ideas { get; set; }
         public DbSet<gVotes> Votes { get; set; }
         public DbSet<gLoginRecord> LoginRecords { get; set; }
@@ -50,11 +50,8 @@ namespace gIdeas.Models
             builder.Entity<gVotes>().HasKey(v => new {v.IdeaId , v.UserId});
 
             builder.Entity<gUser>().HasMany(u => u.Comments).WithOne(c=>c.User).OnDelete(DeleteBehavior.ClientSetNull);
-            builder.Entity<gUser>().HasMany(u => u.FlaggedIdeas).WithOne(f=>f.Users).OnDelete(DeleteBehavior.ClientSetNull);
             #region *** Remove unnecessary attributes form IdentityUser class ***
             builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
-            builder.Entity<gUser>().Ignore(u => u.SecurityStamp);
-            builder.Entity<gUser>().Ignore(u => u.ConcurrencyStamp);
             builder.Entity<gUser>().Ignore(u => u.LockoutEnabled);
             builder.Entity<gUser>().Ignore(u => u.LockoutEnd);
             builder.Entity<gUser>().Ignore(u => u.AccessFailedCount);

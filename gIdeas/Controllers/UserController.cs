@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,23 +40,44 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
         [HttpGet("[action]/{roleId}/{departmentId}/{searchValue?}")]
-        [Authorize(gAppConst.AccessPolicies.LevelOne)]
-        public IActionResult Get(string roleId, string department, string searchValue = "")
+        [Authorize(gAppConst.AccessPolicies.LevelTwo)] /// Done
+        public async Task<IActionResult> Get(string roleId, string departmentId, string searchValue = "")
         {
             try
             {
-                /// populate the list to be returned
-                List<gUser> userList = new List<gUser>();
-
-
-                ///TODO:
                 //1.Check the search parameter and filters and return the appropriate user list
                 //      a.If search value is empty or null then return the filtered users
                 //          Note(Default value for parameters)
                 //                    searchValue = null
-                //ALL OTHER PARAMETERS = ***GET - ALL * **
+                //ALL OTHER PARAMETERS = ***GET - ALL ***
+                List<gUser> userList;
+                /// populate the list to be returned
+                if (string.IsNullOrWhiteSpace(searchValue))
+                {
 
+                    userList = await DbContext.Users.Include(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id.ToString() == departmentId)
+                                                    .Include(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id.ToString() == roleId)
+                                                    .ToListAsync()
+                                                    .ConfigureAwait(false);
+                }
+                else
+                {
+                    int.TryParse(searchValue, out int userId);
+                    userList = await DbContext.Users.Where(u => u.Id == userId
+                                                             || u.FirstName.Contains(searchValue,StringComparison.CurrentCultureIgnoreCase) 
+                                                             || u.Surname.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)
+                                                             || u.Email.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
+                                                    .Include(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id.ToString() == departmentId)
+                                                    .Include(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id.ToString() == roleId)
+                                                    .ToListAsync()
+                                                    .ConfigureAwait(false);
+                }
 
+                foreach (gUser user in userList)
+                {
+                    user.TotalNumberOfIdeas = DbContext.Ideas.Count(i => i.Author == user);
+                    user.TotalNumberOfComments = DbContext.Comments.Count(i => i.User == user);
+                }
 
                 /// return the list of Role ordered by name
                 return Ok(userList);
@@ -69,71 +91,6 @@ namespace gIdeas.Controllers
         }
 
         /// <summary>
-        /// Return a list of user objects including the number of ideas and comments
-        /// </summary>
-        #region *** 200 OK, 400 BadRequest ***
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        #endregion
-        [HttpGet("/get/statistics/totals")]
-        [Authorize(gAppConst.AccessPolicies.LevelOne)]
-        public IActionResult GetStatistics()
-        {
-            try
-            {
-                List<gUser> users = DbContext.Users.OrderBy(u => u.Department).Take(DbContext.Users.Count()).ToList();
-
-                foreach (var user in users)
-                {
-                    user.TotalNumberOfIdeas = DbContext.Ideas.Count(i => i.Author == user);
-                    user.TotalNumberOfComments = DbContext.Comments.Count(i => i.User == user);
-                }
-
-                /// return the list of Role ordered by name
-                return Ok(users);
-            }
-            catch (Exception)
-            {
-                /// in the case any exceptions return the following error
-                gAppConst.Error(ref ErrorsList, "Server Error. Please Contact Administrator.");
-                return BadRequest(ErrorsList);
-            }
-        }
-
-        /// <summary>
-        /// Return a list of browser name sorted by their popularity object
-        /// </summary>
-        //#region *** 200 OK, 400 BadRequest ***
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //#endregion
-        //[HttpGet("/get/browserlist")]
-        //[Authorize(gAppConst.AccessPolicies.LevelOne)]
-        //public IActionResult GetBrowserList()
-        //{
-        //    try
-        //    {
-        //        List<gUser> users = DbContext.Users.OrderBy(u => u.Department).Take(DbContext.Users.Count()).ToList();
-
-        //        foreach (var user in users)
-        //        {
-        //            user.TotalNumberOfIdeas = DbContext.Ideas.Count(i => i.Author == user);
-        //            user.TotalNumberOfComments = DbContext.Comments.Count(i => i.User == user);
-        //        }
-
-        //        /// return the list of Role ordered by name
-        //        return Ok(users);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        /// in the case any exceptions return the following error
-        //        gAppConst.Error(ref ErrorsList, "Server Error. Please Contact Administrator.");
-        //        return BadRequest(ErrorsList);
-        //    }
-        //}
-
-
-        /// <summary>
         ///     Create a new User
         /// </summary>
         #region *** 201 Created, 400 BadRequest ***
@@ -142,12 +99,12 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [Authorize(gAppConst.AccessPolicies.LevelOne)]
+        [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
         public async Task<IActionResult> Post([FromBody] gUser newUser)
         {
             try
             {
-                newUser.PasswordHash = newUser.newPassword;
+                newUser.PasswordHash = newUser.NewPassword;
                 ModelState.Clear();
                 /// if model validation failed
                 if (!TryValidateModel(newUser))
@@ -220,7 +177,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [Authorize(gAppConst.AccessPolicies.LevelOne)]
+        [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
         public async Task<IActionResult> Put([FromBody] gUser modifiedUser)
         {
             try
@@ -281,7 +238,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
         [Authorize(gAppConst.AccessPolicies.LevelTwo)]
-        [HttpPut("put/block/{userId}/{isBlocked}")]
+        [HttpPut("put/{userId}/{isBlocked}")]  /// Done
         public async Task<IActionResult> Put(int userId, bool isBlocked)
         {
             try
@@ -322,48 +279,59 @@ namespace gIdeas.Controllers
         }
 
         /// <summary>
-        /// Update the password of the user
+        /// Update the password of current user
         /// </summary>
         #region *** Put, 200 Ok, 400 BadRequest ***
-        [HttpPut("[action]")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
+        [Authorize(gAppConst.AccessPolicies.LevelFour)]  /// Done
+        [HttpPut("[action]")]
+        public async Task<IActionResult> PutMyPassword([FromBody] gUser modifiedUser)
+        {
+            try
+            {
+                int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
+                if(modifiedUser.Id != userId)
+                {
+                    gAppConst.Error(ref ErrorsList, "Not Authorised!");
+                    return BadRequest(ErrorsList);
+                }
+
+                gUser result = await UpdatePassword(modifiedUser).ConfigureAwait(false);
+                if (result != null)
+                    return Ok(result);
+
+                return BadRequest(ErrorsList);
+            }
+            catch (Exception) // DbUpdateException, DbUpdateConcurrencyException
+            {
+                /// Add the error below to the error list and return bad request
+                gAppConst.Error(ref ErrorsList, $"Server Issue. Please Contact Administrator.");
+                return BadRequest(ErrorsList);
+            }
+        }
+
+        /// <summary>
+        /// Update the password of the user
+        /// </summary>
+        #region *** Put, 200 Ok, 400 BadRequest ***
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        #endregion
+        [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
+        [HttpPut("[action]")]
         public async Task<IActionResult> PutPassword([FromBody] gUser modifiedUser)
         {
             try
             {
-                /// if the user record with the same id is not found
-                if (!DbContext.Users.Any(u => u.Id == modifiedUser.Id))
-                {
-                    gAppConst.Error(ref ErrorsList, "User not found");
-                    return BadRequest(ErrorsList);
-                }
+                gUser result = await UpdatePassword(modifiedUser).ConfigureAwait(false);
+                if (result != null)
+                    return Ok(result);
 
-                /// find the current user details from the database
-                gUser userDetails = DbContext.Users.Find(modifiedUser.Id);
-
-
-                /// generate new password reset token
-                string passResetToken = await UserManager.GeneratePasswordResetTokenAsync(userDetails).ConfigureAwait(false);
-                /// reset user's password
-                IdentityResult result = await UserManager.ResetPasswordAsync(
-                            userDetails, passResetToken, modifiedUser.newPassword).ConfigureAwait(false);
-
-                /// if result is Failed
-                if (!result.Succeeded)
-                {
-                    foreach (var item in result.Errors)
-                        ErrorsList.Add(new gError(item.Code, item.Description));
-
-                    return BadRequest(ErrorsList);
-                }
-
-                /// else the result is a success.
-                /// extract the errors and return bad request containing the errors
-                /// thus return 200 ok status with the updated object
-                return Ok(userDetails);
+                return BadRequest(ErrorsList);
             }
             catch (Exception) // DbUpdateException, DbUpdateConcurrencyException
             {
@@ -382,7 +350,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [Authorize(gAppConst.AccessPolicies.LevelOne)]
+        [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
         public async Task<IActionResult> Delete([FromBody] gUser thisUser)
         {
             try
@@ -409,6 +377,36 @@ namespace gIdeas.Controllers
                 gAppConst.Error(ref ErrorsList, $"Server Issue. Please Contact Administrator.");
                 return BadRequest(ErrorsList);
             }
+        }
+
+        private async Task<gUser> UpdatePassword(gUser SelectedUser)
+        {
+            /// find the current user details from the database
+            gUser userDetails = DbContext.Users.Find(SelectedUser.Id);
+
+            if (userDetails == null)
+            {
+                gAppConst.Error(ref ErrorsList, "User not found!");
+                return null;
+            }
+
+            /// generate new password reset token
+            string passResetToken = await UserManager.GeneratePasswordResetTokenAsync(userDetails).ConfigureAwait(false);
+            /// reset user's password
+            IdentityResult result = await UserManager.ResetPasswordAsync(
+                        userDetails, passResetToken, SelectedUser.NewPassword).ConfigureAwait(false);
+
+            /// if result is Failed
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                    ErrorsList.Add(new gError(item.Code, item.Description));
+
+                return null;
+            }
+
+            /// else the result is a success.
+            return userDetails;
         }
     }
 }

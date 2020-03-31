@@ -58,11 +58,11 @@ namespace gIdeas
                 options.Password = gAppConst.PasswordOptions;
             })
             .AddEntityFrameworkStores<gAppDbContext>()// Add the db context or custom one
-            .AddSignInManager<SignInManager<gUser>>()
+            .AddSignInManager<AuthManager<gUser>>()
             .AddDefaultTokenProviders();
 
             /// Setup for EF identity cookie options 
-            Action<CookieAuthenticationOptions> CookieAuthenticationCookies = options =>
+            void CookieAuthenticationCookies(CookieAuthenticationOptions options)
             {
                 options.LoginPath = "/Login";
                 options.LogoutPath = "/Logout";
@@ -72,7 +72,7 @@ namespace gIdeas
                 options.SlidingExpiration = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            };
+            }
 
             services.AddAuthentication()
                 .AddCookie(gAppConst._AuthSchemeApplication, CookieAuthenticationCookies);

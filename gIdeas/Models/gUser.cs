@@ -7,8 +7,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace gIdeas.Models
 {
-    public class gUser: IdentityUser<int>
+    public class gUser : IdentityUser<int>
     {
+        public gUser()
+        {
+            UserName = $"p8b{new Random().Next()}";
+        }
+
         [Key, ForeignKey("Id")]
         public override int Id { get; set; }
 
@@ -41,23 +46,25 @@ namespace gIdeas.Models
         #endregion
         public override string Email { get; set; }
 
-        [Required(ErrorMessage ="Department is required")]
+        [Required(ErrorMessage = "Department is required")]
         public gDepartment Department { get; set; }
 
-        [Required(ErrorMessage ="Role is required.")]
+        [Required(ErrorMessage = "Role is required.")]
         public gRole Role { get; set; }
 
         public bool IsBlocked { get; set; } = false;
 
         public ICollection<gIdea> Ideas { get; set; }
         public ICollection<gComment> Comments { get; set; }
-        public ICollection<FlaggedIdea> FlaggedIdeas { get; set; }
-        public ICollection<gLoginRecord> loginRecords { get; set; }
+        [ForeignKey("UserId"), Column(Order = 0)]
+        public ICollection<gFlaggedIdea> FlaggedIdeas { get; set; }
+        [ForeignKey("UserId"), Column(Order = 0)]
+        public ICollection<gLoginRecord> LoginRecords { get; set; }
 
         [NotMapped]
         public DateTime LastLoginDate { get; set; }
         [NotMapped]
-        public string newPassword { get; set; }
+        public string NewPassword { get; set; }
         [NotMapped]
         public int TotalNumberOfIdeas { get; set; }
         [NotMapped]
@@ -73,11 +80,11 @@ namespace gIdeas.Models
         [JsonIgnore]
         public override bool PhoneNumberConfirmed { get; set; }
         [JsonIgnore]
+        public override bool EmailConfirmed { get; set; }
+        [JsonIgnore]
         public override string ConcurrencyStamp { get; set; }
         [JsonIgnore]
         public override string SecurityStamp { get; set; }
-        [JsonIgnore]
-        public override bool EmailConfirmed { get; set; }
         [JsonIgnore]
         public override string NormalizedEmail { get; set; }
         [JsonIgnore]

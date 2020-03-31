@@ -49,12 +49,24 @@ namespace gIdeas
             public const string LevelFour = "AccessLevelFour";
         }
 
+        /// <summary>
+        /// valid idea status
+        /// </summary>
+        public struct IdeaStatus
+        {
+            public const string Pending = "Pending";
+            public const string FirstClosure = "FirstClosure";
+            public const string Closed = "Closed";
+            public const string Blocked = "Blocked";
+        }
+
         /// *** Claim Identifiers ***
         internal const string _ClaimUserId = "UserId";
         internal const string _ClaimRole = "Role";
 
+
         /// *** Scheme ***
-        internal const string _AuthSchemeApplication = "Identity.App";
+        internal const string _AuthSchemeApplication = "Identity.Application";
 
         /// *** Password Requirement ***
         internal static PasswordOptions PasswordOptions
@@ -113,14 +125,14 @@ namespace gIdeas
             browserName = "Others";
             
             /// Get the OS Name
-            if (userAgent.Contains("Mobile", StringComparison.CurrentCultureIgnoreCase))
-                browserName = "Mobile - ";
-            else if (userAgent.Contains("Windows", StringComparison.CurrentCultureIgnoreCase))
-                browserName = "Windows - ";
-            else if (userAgent.Contains("Mac", StringComparison.CurrentCultureIgnoreCase))
-                browserName = "Windows - ";
-            else
-                browserName = "Others - ";
+            //if (userAgent.Contains("Mobile", StringComparison.CurrentCultureIgnoreCase))
+            //    browserName = "Mobile - ";
+            //else if (userAgent.Contains("Windows", StringComparison.CurrentCultureIgnoreCase))
+            //    browserName = "Windows - ";
+            //else if (userAgent.Contains("Macintosh", StringComparison.CurrentCultureIgnoreCase))
+            //    browserName = "Macintosh - ";
+            //else
+            //    browserName = "Others - ";
 
             /// Get the browser name
             if (userAgent.Contains("Edge", StringComparison.CurrentCultureIgnoreCase))
@@ -131,10 +143,8 @@ namespace gIdeas
                 browserName += "FireFox";
             else if (userAgent.Contains("Safari", StringComparison.CurrentCultureIgnoreCase))
                 browserName += "Safari";
-            else if (userAgent.Contains("ie", StringComparison.CurrentCultureIgnoreCase))
-                browserName += "IE";
             else
-                browserName += "Other";
+                browserName += "Others";
         }
     }
     /// <summary>

@@ -8,14 +8,16 @@
     background-position: center center;
     background-repeat: no-repeat;
     padding-top: 30px;
-    height: 100vh;
-    margin-bottom: 0;
+    bottom: 0;
+    width:inherit;
+    height:inherit;
+    overflow-x:hidden;
 }
 
 /* images */
 .login-img-container {
-    position: relative;
-    height: 100%;
+    width:auto;
+    height:100vh;
 }
 .login-logo-img {
     width: 155.15px;
@@ -42,11 +44,11 @@
 }
 
 .login-container {
-    position: sticky;
+    position: relative;
     z-index: 1;
     background: #FFFFFF;
     max-width: 370.3px;
-    margin: 0 380px 50px auto;
+    margin: 1rem Auto auto 50%;
     text-align: left;
 }
 .bottom-box-container {
@@ -54,7 +56,6 @@
     z-index: 1;
     background: #FFFFFF;
     max-width: 370.3px;
-    margin: 0 380px 0 auto;
     text-align: left;
 }
 

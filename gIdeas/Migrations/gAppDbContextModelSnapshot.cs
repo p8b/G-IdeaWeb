@@ -32,30 +32,6 @@ namespace gIdeas.Migrations
                     b.ToTable("AccessClaims");
                 });
 
-            modelBuilder.Entity("gIdeas.Models.FlaggedIdea", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<int>("IdeaId");
-
-                    b.Property<string>("Type")
-                        .IsRequired();
-
-                    b.Property<int>("UsersId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdeaId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("FlaggedIdeas");
-                });
-
             modelBuilder.Entity("gIdeas.Models.gCategoriesToIdeas", b =>
                 {
                     b.Property<int>("CategoryId");
@@ -154,7 +130,7 @@ namespace gIdeas.Migrations
 
                     b.Property<int>("IdeaId");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
@@ -164,15 +140,41 @@ namespace gIdeas.Migrations
                     b.ToTable("Documents");
                 });
 
+            modelBuilder.Entity("gIdeas.Models.gFlaggedIdea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("IdeaId");
+
+                    b.Property<string>("Type")
+                        .IsRequired();
+
+                    b.Property<int>("UsersId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdeaId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("FlaggedIdeas");
+                });
+
             modelBuilder.Entity("gIdeas.Models.gIdea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ArrayBufferStringBase64");
+
                     b.Property<int>("AuthorId");
 
-                    b.Property<string>("CloseDate")
+                    b.Property<string>("ClosureDate")
                         .IsRequired()
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 48)))
                         .HasColumnType("nvarchar(30)");
@@ -184,7 +186,7 @@ namespace gIdeas.Migrations
 
                     b.Property<bool>("DisplayAnonymous");
 
-                    b.Property<string>("FinalClosureDate")
+                    b.Property<string>("FirstClosureDate")
                         .IsRequired()
                         .HasConversion(new ValueConverter<string, string>(v => default(string), v => default(string), new ConverterMappingHints(size: 48)))
                         .HasColumnType("nvarchar(30)");
@@ -197,6 +199,8 @@ namespace gIdeas.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
+
+                    b.Property<int>("ViewCount");
 
                     b.HasKey("Id");
 
@@ -273,6 +277,9 @@ namespace gIdeas.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
                     b.Property<int>("DepartmentId");
 
                     b.Property<string>("Email")
@@ -293,6 +300,8 @@ namespace gIdeas.Migrations
                         .IsRequired();
 
                     b.Property<int>("RoleId");
+
+                    b.Property<string>("SecurityStamp");
 
                     b.Property<string>("Surname")
                         .IsRequired()
@@ -332,18 +341,6 @@ namespace gIdeas.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("gIdeas.Models.FlaggedIdea", b =>
-                {
-                    b.HasOne("gIdeas.Models.gIdea", "Idea")
-                        .WithMany("gFlaggedIdeas")
-                        .HasForeignKey("IdeaId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("gIdeas.Models.gUser", "Users")
-                        .WithMany("FlaggedIdeas")
-                        .HasForeignKey("UsersId");
-                });
-
             modelBuilder.Entity("gIdeas.Models.gCategoriesToIdeas", b =>
                 {
                     b.HasOne("gIdeas.Models.gCategoryTag")
@@ -352,7 +349,7 @@ namespace gIdeas.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("gIdeas.Models.gIdea")
-                        .WithMany("gCategoriesToIdeas")
+                        .WithMany("CategoriesToIdeas")
                         .HasForeignKey("IdeaId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -360,7 +357,7 @@ namespace gIdeas.Migrations
             modelBuilder.Entity("gIdeas.Models.gComment", b =>
                 {
                     b.HasOne("gIdeas.Models.gIdea", "Idea")
-                        .WithMany("gComments")
+                        .WithMany("Comments")
                         .HasForeignKey("IdeaId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -371,10 +368,22 @@ namespace gIdeas.Migrations
 
             modelBuilder.Entity("gIdeas.Models.gDocument", b =>
                 {
-                    b.HasOne("gIdeas.Models.gIdea", "Idea")
-                        .WithMany("gDocuments")
+                    b.HasOne("gIdeas.Models.gIdea")
+                        .WithMany("Documents")
                         .HasForeignKey("IdeaId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("gIdeas.Models.gFlaggedIdea", b =>
+                {
+                    b.HasOne("gIdeas.Models.gIdea", "Idea")
+                        .WithMany("FlaggedIdeas")
+                        .HasForeignKey("IdeaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("gIdeas.Models.gUser", "Users")
+                        .WithMany("FlaggedIdeas")
+                        .HasForeignKey("UsersId");
                 });
 
             modelBuilder.Entity("gIdeas.Models.gIdea", b =>
@@ -408,7 +417,7 @@ namespace gIdeas.Migrations
             modelBuilder.Entity("gIdeas.Models.gVotes", b =>
                 {
                     b.HasOne("gIdeas.Models.gIdea")
-                        .WithMany("gVotes")
+                        .WithMany("Votes")
                         .HasForeignKey("IdeaId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

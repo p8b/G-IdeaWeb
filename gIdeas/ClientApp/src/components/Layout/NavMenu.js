@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { createRef, Component, PureComponent } from 'react';
 /// Navigation components used from react strap library
 import {
     Collapse, Navbar, NavbarBrand, NavbarToggler, NavLink, Container
@@ -6,20 +6,27 @@ import {
 /// Use Link component from react router dom in order
 // to navigate to another page
 import { Link } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 
 /// connect method from react redux in order to
 // connect the component to redux state
 import { connect } from 'react-redux';
+import { AdminNav, DefaultNav, QAManagerNav, QACoordinatorNav, StaffNav } from '../Layout/NavMenuItems';
+import { AccessClaims } from '../_MainApp/appConst'
 
+/// Action to Show the navigation bar and footer components
+import { silentAuthentication } from '../../Actions/AuthenticationActions';
 // Navigation menu component
-class NavMenu extends Component {
+class NavMenu extends PureComponent {
     constructor(props) {
         super(props);
         /// Component state
         this.state = {
             /// use to make the small screen navigation menu visibility
             smScreenNavIsOpen: false,
+            currentNavItems: []
         };
+
         // used for auto hiding navbar and its drop-down list
         // for small screens
         this.toggleContainerNavBar = createRef(0);
@@ -28,7 +35,6 @@ class NavMenu extends Component {
         this.toggleNavbar = this.toggleNavbar.bind(this);
         this.onClickOutsideHandler = this.onClickOutsideHandler.bind(this);
     }
-
     /// After the component is mounted
     componentDidMount() {
         /// Create a click event listener used for auto 
@@ -76,28 +82,47 @@ class NavMenu extends Component {
         });
     }
 
-    render() {
-        /// Hide the header if necessary (Used for login page)
-        if (!this.props.NavAndFooterVisibility)
-            return (<div />)
 
-        /// Otherwise render the header components
+    render() {
+        let CurrentNavItems = [];
+        console.log(this.props.Authentication.accessClaim)
+        /// Check which menu items to show for the user
+        switch (this.props.Authentication.accessClaim) {
+            case AccessClaims.Admin:
+                CurrentNavItems = AdminNav;
+                break;
+            case AccessClaims.QAMananger:
+                CurrentNavItems = QAManagerNav;
+                break;
+            case AccessClaims.QACoordinator:
+                CurrentNavItems = QACoordinatorNav;
+                break;
+            case AccessClaims.Staff:
+                CurrentNavItems = StaffNav;
+                break;
+            default:
+                CurrentNavItems = DefaultNav;
+                break;
+        }
+
         return (
             <header>
                 {/** Top bar */}
-                <div className="top-bar">
-                    <Container>
-                        <div className="top-bar-txt row">
-                            <div className="m-1 ml-auto">
-                                <font className="txt-gray">Welcome:</font> First Name
+                {this.props.Authentication.isAuthenticated &&
+                    <div className="top-bar">
+                        <Container>
+                            <div className="top-bar-txt row">
+                                <div className="m-1 ml-auto">
+                                    <font className="txt-gray">Welcome:</font> {`${this.props.Authentication.user.FirstName} ${this.props.Authentication.user.Surname}`}
+                                </div>
+                                <Link className="top-bar-logout-link" to="/Logout">Logout</Link>
                             </div>
-                            <Link className="top-bar-logout-link" to="/Logout">Logout</Link>
-                        </div>
-                    </Container>
-                </div>
+                        </Container>
+                    </div>
+                }
 
                 {/** Navigation Menu */}
-                <Navbar className="bg-white navbar-expand-sm navbar-toggleable-sm box-shadow padding-0 ">
+                <Navbar className="bg-white navbar-expand-lg navbar-toggleable-lg box-shadow padding-0 ">
                     <Container className="p-0">
                         {/* Logo */}
                         <NavbarBrand tag={Link} className="p-0 m-0" to="/">
@@ -113,10 +138,10 @@ class NavMenu extends Component {
 
                         {/* Navbar items */}
                         <Collapse isOpen={this.state.smScreenNavIsOpen} navbar
-                            className="d-sm-inline-flex flex-sm-row text-center font-weight-bold">
+                            className="d-lg-inline-flex flex-lg-row text-center font-weight-bold">
                             {/* Authorized user links */}
                             <div className="text-dark text-nav word-break ml-auto"></div>
-                            {this.props.NavMenu.map(link => {
+                            {CurrentNavItems.map(link => {
                                 return (<NavLink key={link.id} tag={Link} className="nav-item" to={link.path}>{link.displayName}</NavLink>);
                             })}
                         </Collapse>
@@ -130,12 +155,20 @@ class NavMenu extends Component {
 const mapStateToProps = (state) => {
     return {
         NavMenu: state.NavMenu,
-        NavAndFooterVisibility: state.NavAndFooterVisibility,
         Authentication: state.Authentication,
     }
 };
+/// Map actions (which may include dispatch to redux store) to component
+const mapDispatchToProps = {
+    AdminNav,
+    DefaultNav,
+    QAManagerNav,
+    QACoordinatorNav,
+    StaffNav,
+    silentAuthentication,
+}
 /// Redux Connection before exporting the component
 export default connect(
     mapStateToProps,
-    null
+    dispatch => bindActionCreators(mapDispatchToProps, dispatch)
 )(NavMenu);

@@ -12,12 +12,12 @@ namespace gIdeas.Models
 
         [DataType("nvarchar(500)")]
         [Required(ErrorMessage ="Comment is required.")]
-        public string Comment { get; set; }
+        public string Description { get; set; }
 
         public bool IsAnonymous { get; set; }
 
         [Required(ErrorMessage ="Idea is require for commenting")]
-        public gIdea Idea { get; set; }
+        public int IdeaId { get; set; }
 
         [Required(ErrorMessage ="User is require for commenting")]
         public gUser User { get; set; }

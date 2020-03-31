@@ -15,11 +15,6 @@ class Footer extends Component {
     }
 
     render() {
-        /// Hide the footer if necessary (Used for login page)
-        if (!this.props.NavAndFooterVisibility)
-            return (<div />)
-
-        /// Otherwise render the footer components
         return (
             <footer className="footer row pt-3 pb-3 justify-content-center">
                 <div className="container">

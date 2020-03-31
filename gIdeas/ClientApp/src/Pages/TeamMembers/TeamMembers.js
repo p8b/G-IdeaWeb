@@ -4,6 +4,15 @@ import { bindActionCreators } from 'redux';
 import { Container } from 'reactstrap';
 
 class TeamMembers extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            State1: null,
+        }
+    }
+    async ComponentDidMount() {
+
+    }
     render() {
         return (
             <Container>

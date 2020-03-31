@@ -16,7 +16,7 @@ namespace gIdeas.Controllers
     public class AuthenticationController : Controller
     {
         public gAppDbContext DbContext { get; }
-        public SignInManager<gUser> LoginManager { get; }
+        public AuthManager<gUser> authManager { get; }
         public UserManager<gUser> UserManager { get; }
         private List<gError> ErrorsList = new List<gError>();
 
@@ -26,11 +26,55 @@ namespace gIdeas.Controllers
         /// <param name="db">Receive the gAppDbContext instance from the ASP.Net Pipeline</param>
         /// <param name="sm)">Receive the SignInManager instance from the ASP.Net Pipeline</param>
         /// <param name="um)">Receive the UserManager instance from the ASP.Net Pipeline</param>
-        public AuthenticationController(gAppDbContext db, SignInManager<gUser> sm, UserManager<gUser> um)
+        public AuthenticationController(gAppDbContext db, AuthManager<gUser> sm, UserManager<gUser> um)
         {
             DbContext = db;
-            LoginManager = sm;
+            authManager = sm;
             UserManager = um;
+        }
+
+
+        #region *** 200 OK, 400 BadRequest ***
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        #endregion
+        [HttpGet("[action]/BrowserStatistics")]
+        [Authorize(Policy = gAppConst.AccessPolicies.LevelOne)] /// Done
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                gBrowser Edge, Chrome, FireFox, Safari, Others;
+
+                Edge = new gBrowser {Name = "Edge" };
+                Chrome = new gBrowser {Name = "Chrome" };
+                FireFox = new gBrowser {Name = "FireFox" };
+                Safari = new gBrowser {Name = "Safari" };
+                Others = new gBrowser {Name = "Others" };
+
+                Others.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Others.Name)).ConfigureAwait(false);
+                Chrome.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Chrome.Name)).ConfigureAwait(false);
+                FireFox.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(FireFox.Name)).ConfigureAwait(false);
+                Safari.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Safari.Name)).ConfigureAwait(false);
+                Others.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Others.Name)).ConfigureAwait(false);
+
+                List<gBrowser> BrowserList = new List<gBrowser>();
+                BrowserList.Add(Edge);
+                BrowserList.Add(Chrome);
+                BrowserList.Add(FireFox);
+                BrowserList.Add(Safari);
+                BrowserList.Add(Others);
+
+
+                /// and return ok status
+                return Ok(BrowserList);
+            }
+            catch (Exception)
+            {
+                /// if there are any exception return login failed error
+                gAppConst.Error(ref ErrorsList, "Server Error. Please Contact The Administrator.");
+                return Unauthorized(ErrorsList);
+            }
         }
 
         #region *** 200 OK, 400 BadRequest ***
@@ -38,7 +82,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [HttpPost("[action]")]
+        [HttpPost("[action]")] /// Done
         public async Task<IActionResult> Login([FromBody] dynamic jsonData)
         {
             gAppConst.GetBrowserDetails(Request.Headers["User-Agent"].ToString(), out string BrowserName);
@@ -56,7 +100,7 @@ namespace gIdeas.Controllers
                 loginRecord = new gLoginRecord
                 {
                     BrowserName = BrowserName,
-                    User = user,
+                    UserId = user.Id,
                 };
                 rememberMe = (bool)jsonData.rememberMe;
             }
@@ -81,28 +125,34 @@ namespace gIdeas.Controllers
                                                     .FirstOrDefault();
 
                 /// try to sign-in the user by using the password provided
-                var loginResult = await LoginManager.PasswordSignInAsync(userDetails, user.PasswordHash, rememberMe, false).ConfigureAwait(false);
+                var loginResult = await authManager.PasswordSignInAsync(userDetails, user.PasswordHash, rememberMe, false).ConfigureAwait(false);
 
                 /// if sign-in succeeded then return OK status
                 if (loginResult.Succeeded)
                 {
                     /// get the last login record
-                    gLoginRecord LastLogin = await DbContext.LoginRecords.LastAsync(l => l.User.Id == userDetails.Id).ConfigureAwait(false);
-                    /// If it is not the user's first login then populate the current users last login date property
-                    if (LastLogin != null)
-                        userDetails.LastLoginDate = LastLogin.TimeStamp;
+                    gLoginRecord LastLogin = null;
+                    try
+                    {
+                        LastLogin = await DbContext.LoginRecords.LastAsync(l => l.UserId == userDetails.Id).ConfigureAwait(false);
+                        /// If it is not the user's first login then populate the current users last login date property
+                        if (LastLogin != null)
+                            userDetails.LastLoginDate = LastLogin.TimeStamp;
 
-                    /// Add the login record and return the user's details
-                    await DbContext.LoginRecords.AddAsync(loginRecord).ConfigureAwait(false);
+                        /// Add the login record and return the user's details
+                        await DbContext.LoginRecords.AddAsync(loginRecord).ConfigureAwait(false);
+                    }
+                    catch (Exception) { }
+
                     await DbContext.SaveChangesAsync().ConfigureAwait(false);
                     return Ok(userDetails);
                 }
 
                 /// else user has entered the wrong password
-               gAppConst.Error(ref ErrorsList, "Wrong Password", "Password");
+                gAppConst.Error(ref ErrorsList, "Wrong Password", "Password");
                 return BadRequest(ErrorsList);
             }
-            catch (Exception)
+            catch (Exception eee)
             {
                 /// if there are any exception return login failed error
                 gAppConst.Error(ref ErrorsList, "Login Failed");
@@ -110,19 +160,22 @@ namespace gIdeas.Controllers
             }
         }
 
-        #region *** HttpGet, 200 OK, 400 BadRequest, Authorize staff ***
-        [Consumes(MediaTypeNames.Application.Json)]
+        #region *** HttpGet, 200 OK, 400 BadRequest ***
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [HttpGet("[action]")]
+        [HttpGet("[action]")] /// Done
         [Authorize(Policy = gAppConst.AccessPolicies.LevelFour)]
         public async Task<IActionResult> Silent()
         {
             try
             {
+                int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
                 // return 200 response with 
-                return Ok(await UserManager.GetUserAsync(User).ConfigureAwait(false));
+                return Ok(await DbContext.Users.Include(u => u.Department)
+                                               .Include(u => u.Role)
+                                               .FirstOrDefaultAsync(u => u.Id == userId)
+                                               .ConfigureAwait(false));
             }
             catch (Exception)
             {
@@ -133,18 +186,17 @@ namespace gIdeas.Controllers
         }
 
         #region *** 200 OK, 400 BadRequest ***
-        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [HttpGet("[action]")]
+        [HttpGet("[action]")] /// Done
         [Authorize(Policy = gAppConst.AccessPolicies.LevelFour)]
         public async Task<IActionResult> Logout()
         {
             try
             {
                 /// try to sign-out the user
-                await LoginManager.SignOutAsync().ConfigureAwait(false);
+                await authManager.SignOutAsync().ConfigureAwait(false);
                 /// and return ok status
                 return Ok("User Logged out");
             }

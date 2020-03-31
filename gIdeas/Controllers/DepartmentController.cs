@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
         [HttpGet("[action]")]
-        [Authorize(gAppConst.AccessPolicies.LevelFour)]
+        [Authorize(gAppConst.AccessPolicies.LevelFour)]  /// Done
         public IActionResult Get()
         {
             try
@@ -58,15 +59,16 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [HttpGet("[action]/statistics")]
-        [Authorize(gAppConst.AccessPolicies.LevelOne)]
-        public IActionResult Get(bool isNull = false)
+        [HttpGet("get/statistics")]
+        [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
+        public async Task<IActionResult> GetStatistics()
         {
             try
             {
-                List<gDepartment> departments = DbContext.Departments.OrderBy(o => o.Name)
-                                                                     .Take(DbContext.Departments.Count())
-                                                                     .ToList();
+                await DbContext.Departments.LoadAsync().ConfigureAwait(false);
+                List<gDepartment> departments = await DbContext.Departments.OrderBy(o => o.Name)
+                                                                           .ToListAsync()
+                                                                           .ConfigureAwait(false);
 
                 foreach (var dep in departments)
                 {
@@ -88,13 +90,13 @@ namespace gIdeas.Controllers
         /// <summary>
         ///     Create a new Department
         /// </summary>
-        #region *** 201 Created, 400 BadRequest, Authorize Admin ***
+        #region *** 201 Created, 400 BadRequest ***
         [HttpPost("[action]")]
-        //[Authorize(gAppConst.AccessClaims.Admin)]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
+        [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
         public async Task<IActionResult> Post([FromBody] gDepartment newDepartment)
         {
             try
@@ -136,13 +138,13 @@ namespace gIdeas.Controllers
         /// <summary>
         /// Delete Department
         /// </summary>
-        #region *** 200 Ok, 400 BadRequest, Authorize Admin ***
+        #region *** 200 Ok, 400 BadRequest ***
         [HttpDelete("[action]")]
-        // [Authorize(gAppConst.AccessClaims.Admin)]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
+        [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
         public async Task<IActionResult> Delete([FromBody] gDepartment department)
         {
             try
@@ -151,6 +153,14 @@ namespace gIdeas.Controllers
                 if (!DbContext.Departments.Any(d => d.Id == department.Id))
                 {
                     gAppConst.Error(ref ErrorsList, "Department not found");
+                    return BadRequest(ErrorsList);
+                }
+
+
+                /// If the department is in use by any user then do not allow delete
+                if (DbContext.Users.Any(u => u.Department.Id == department.Id))
+                {
+                    gAppConst.Error(ref ErrorsList, "Category tag is in use by an idea.");
                     return BadRequest(ErrorsList);
                 }
 

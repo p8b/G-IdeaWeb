@@ -20,6 +20,12 @@ namespace gIdeas.Models
         [Column(TypeName = "nvarchar(100)")]
         public string BrowserName { get; set; }
 
-        public gUser User { get; set; }
+        public int UserId { get; set; }
+    }
+
+    public class gBrowser
+    {
+        public string Name { get; set; }
+        public int TotalHits { get; set; }
     }
 }

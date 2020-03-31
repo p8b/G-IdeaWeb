@@ -2,13 +2,13 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Redirect } from "react-router-dom";
-import { signOut } from "./Actions/AuthenticationAction";
+import { logout } from "../../Actions/AuthenticationActions";
 
 class Logout extends PureComponent {
     componentDidMount() {
         /// if the user is authenticated then trigger the logout action
         if (this.props.Authentication.isAuthenticated) {
-            this.props.signOut();
+            this.props.logout();
         }
     }
     render() {
@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
 };
 /// Map actions (which may include dispatch to redux store) to component
 const mapDispatchToProps = {
-    signOut,
+    logout,
 };
 /// Redux Connection before exporting the component
 export default connect(
