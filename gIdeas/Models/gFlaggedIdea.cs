@@ -18,6 +18,6 @@ namespace gIdeas.Models
         public int IdeaId { get; set; }
 
         [Required(ErrorMessage = "User is needed for submitting a flag report.")]
-        public int UserId { get; set; }
+        public gUser User { get; set; }
     }
 }

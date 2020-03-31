@@ -40,11 +40,11 @@ namespace gIdeas.Controllers
         {
 
             int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
-            newflaggedIdea.UserId = userId;
+            newflaggedIdea.User.Id = userId;
 
             /// check the database if the same user has already posted flag with the same type
             if (DbContext.FlaggedIdeas.Any(f => f.Type == newflaggedIdea.Type 
-                                              && f.UserId == newflaggedIdea.UserId))
+                                              && f.User.Id == newflaggedIdea.User.Id))
             {
                 /// extract the errors and return bad request containing the errors
                 gAppConst.Error(ref ErrorsList, "Request already received.");

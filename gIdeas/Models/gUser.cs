@@ -56,7 +56,6 @@ namespace gIdeas.Models
 
         public ICollection<gIdea> Ideas { get; set; }
         public ICollection<gComment> Comments { get; set; }
-        [ForeignKey("UserId"), Column(Order = 0)]
         public ICollection<gFlaggedIdea> FlaggedIdeas { get; set; }
         [ForeignKey("UserId"), Column(Order = 0)]
         public ICollection<gLoginRecord> LoginRecords { get; set; }

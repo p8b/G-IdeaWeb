@@ -50,6 +50,7 @@ namespace gIdeas.Models
             builder.Entity<gVotes>().HasKey(v => new {v.IdeaId , v.UserId});
 
             builder.Entity<gUser>().HasMany(u => u.Comments).WithOne(c=>c.User).OnDelete(DeleteBehavior.ClientSetNull);
+            builder.Entity<gUser>().HasMany(u => u.FlaggedIdeas).WithOne(f => f.User).OnDelete(DeleteBehavior.ClientSetNull);
             #region *** Remove unnecessary attributes form IdentityUser class ***
             builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
             builder.Entity<gUser>().Ignore(u => u.LockoutEnabled);
