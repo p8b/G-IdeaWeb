@@ -21,7 +21,7 @@ namespace gIdeas.Controllers
         private List<gError> ErrorsList = new List<gError>();
 
         /// <summary>
-        ///     Class Constructor. Set the local properties
+        ///     Class Constructor. Set the local properties 
         /// </summary>
         /// <param name="db">Receive the gAppDbContext instance from the ASP.Net Pipeline</param>
         /// <param name="sm)">Receive the SignInManager instance from the ASP.Net Pipeline</param>
