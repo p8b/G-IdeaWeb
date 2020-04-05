@@ -15,7 +15,7 @@ namespace gIdeas.Models
 
         [Column(TypeName = "nvarchar(30)")]
         [DataType(DataType.DateTime)]
-        public DateTime TimeStamp { get; set; } = new DateTime();
+        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
 
         [Column(TypeName = "nvarchar(100)")]
         public string BrowserName { get; set; }

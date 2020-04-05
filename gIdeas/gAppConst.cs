@@ -136,15 +136,15 @@ namespace gIdeas
 
             /// Get the browser name
             if (userAgent.Contains("Edge", StringComparison.CurrentCultureIgnoreCase))
-                browserName += "Edge";
+                browserName = "Edge";
             else if (userAgent.Contains("chrome", StringComparison.CurrentCultureIgnoreCase))
-                browserName += "Chrome";
+                browserName = "Chrome";
             else if (userAgent.Contains("FireFox", StringComparison.CurrentCultureIgnoreCase))
-                browserName += "FireFox";
+                browserName = "FireFox";
             else if (userAgent.Contains("Safari", StringComparison.CurrentCultureIgnoreCase))
-                browserName += "Safari";
+                browserName = "Safari";
             else
-                browserName += "Others";
+                browserName = "Others";
         }
     }
     /// <summary>

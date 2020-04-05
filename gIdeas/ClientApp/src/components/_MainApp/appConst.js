@@ -22,7 +22,7 @@ export const getCookieValue = (name) => {
 
 export const AccessClaims = {
     Admin: "Admin",
-    QAMananger: "QaManager",
+    QAMananger: "QAManager",
     QACoordinator: "QACoordinator",
     Staff: "Staff"
 }

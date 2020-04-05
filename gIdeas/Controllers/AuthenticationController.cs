@@ -46,17 +46,17 @@ namespace gIdeas.Controllers
             {
                 gBrowser Edge, Chrome, FireFox, Safari, Others;
 
-                Edge = new gBrowser {Name = "Edge" };
-                Chrome = new gBrowser {Name = "Chrome" };
-                FireFox = new gBrowser {Name = "FireFox" };
-                Safari = new gBrowser {Name = "Safari" };
-                Others = new gBrowser {Name = "Others" };
+                Edge = new gBrowser { Name = "Edge" };
+                Chrome = new gBrowser { Name = "Chrome" };
+                FireFox = new gBrowser { Name = "FireFox" };
+                Safari = new gBrowser { Name = "Safari" };
+                Others = new gBrowser { Name = "Others" };
 
-                Others.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Others.Name)).ConfigureAwait(false);
-                Chrome.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Chrome.Name)).ConfigureAwait(false);
-                FireFox.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(FireFox.Name)).ConfigureAwait(false);
-                Safari.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Safari.Name)).ConfigureAwait(false);
-                Others.TotalHits = await DbContext.LoginRecords.CountAsync(l=> l.BrowserName.Contains(Others.Name)).ConfigureAwait(false);
+                Others.TotalHits = await DbContext.LoginRecords.CountAsync(l => l.BrowserName.Contains(Others.Name)).ConfigureAwait(false);
+                Chrome.TotalHits = await DbContext.LoginRecords.CountAsync(l => l.BrowserName.Contains(Chrome.Name)).ConfigureAwait(false);
+                FireFox.TotalHits = await DbContext.LoginRecords.CountAsync(l => l.BrowserName.Contains(FireFox.Name)).ConfigureAwait(false);
+                Safari.TotalHits = await DbContext.LoginRecords.CountAsync(l => l.BrowserName.Contains(Safari.Name)).ConfigureAwait(false);
+                Others.TotalHits = await DbContext.LoginRecords.CountAsync(l => l.BrowserName.Contains(Others.Name)).ConfigureAwait(false);
 
                 List<gBrowser> BrowserList = new List<gBrowser>();
                 BrowserList.Add(Edge);
@@ -100,7 +100,6 @@ namespace gIdeas.Controllers
                 loginRecord = new gLoginRecord
                 {
                     BrowserName = BrowserName,
-                    UserId = user.Id,
                 };
                 rememberMe = (bool)jsonData.rememberMe;
             }
@@ -139,10 +138,11 @@ namespace gIdeas.Controllers
                         if (LastLogin != null)
                             userDetails.LastLoginDate = LastLogin.TimeStamp;
 
-                        /// Add the login record and return the user's details
-                        await DbContext.LoginRecords.AddAsync(loginRecord).ConfigureAwait(false);
                     }
                     catch (Exception) { }
+                    loginRecord.UserId = userDetails.Id;
+                    /// Add the login record and return the user's details
+                    await DbContext.LoginRecords.AddAsync(loginRecord).ConfigureAwait(false);
 
                     await DbContext.SaveChangesAsync().ConfigureAwait(false);
                     return Ok(userDetails);
