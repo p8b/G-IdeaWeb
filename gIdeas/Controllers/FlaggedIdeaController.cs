@@ -39,12 +39,12 @@ namespace gIdeas.Controllers
         public async Task<IActionResult> Post([FromBody] gFlaggedIdea newflaggedIdea)
         {
 
-            int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
+            int.TryParse(User.Claims.First(c => c.Type == "UserId").Value, out int userId);
             newflaggedIdea.User.Id = userId;
 
             /// check the database if the same user has already posted flag with the same type
-            if (DbContext.FlaggedIdeas.Any(f => f.Type == newflaggedIdea.Type 
-                                              && f.User.Id == newflaggedIdea.User.Id))
+            if (await DbContext.FlaggedIdeas.AnyAsync(f => f.Type == newflaggedIdea.Type 
+                                              && f.User.Id == newflaggedIdea.User.Id).ConfigureAwait(false))
             {
                 /// extract the errors and return bad request containing the errors
                 gAppConst.Error(ref ErrorsList, "Request already received.");
@@ -58,7 +58,6 @@ namespace gIdeas.Controllers
                 /// return bad request with all the errors
                 return BadRequest(ErrorsList);
             }
-
 
             /// else gFlaggedIdeas object is made without any errors
             /// Add the new gFlaggedIdeas to the EF context

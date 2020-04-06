@@ -72,8 +72,8 @@ namespace gIdeas.Controllers
 
                 foreach (var dep in departments)
                 {
-                    dep.TotalNumberOfContributors = DbContext.Users.Count(u => u.Ideas.Any() || u.Comments.Any());
-                    dep.TotalNumberOfIdeas = DbContext.Ideas.Count(i => i.Author.Department == dep);
+                    dep.TotalNumberOfContributors = await DbContext.Users.CountAsync(u => u.Ideas.Any() || u.Comments.Any()).ConfigureAwait(false);
+                    dep.TotalNumberOfIdeas = await DbContext.Ideas.CountAsync(i => i.Author.Department == dep).ConfigureAwait(false);
                     dep.TotalPercentageOfIdeas = (dep.TotalNumberOfIdeas / DbContext.Ideas.Count()) * 100;
                 }
                 /// return the list of departments ordered by name
@@ -110,7 +110,7 @@ namespace gIdeas.Controllers
                 }
 
                 /// check the database to see if a department with the same name exists
-                if (DbContext.Departments.Any(d => d.Name == newDepartment.Name))
+                if (await DbContext.Departments.AnyAsync(d => d.Name == newDepartment.Name).ConfigureAwait(false))
                 {
                     /// extract the errors and return bad request containing the errors
                     gAppConst.Error(ref ErrorsList, "Department already exists.");
@@ -150,7 +150,7 @@ namespace gIdeas.Controllers
             try
             {
                 /// if the Department record with the same id is not found
-                if (!DbContext.Departments.Any(d => d.Id == department.Id))
+                if (!await DbContext.Departments.AnyAsync(d => d.Id == department.Id).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Department not found");
                     return BadRequest(ErrorsList);
@@ -158,7 +158,7 @@ namespace gIdeas.Controllers
 
 
                 /// If the department is in use by any user then do not allow delete
-                if (DbContext.Users.Any(u => u.Department.Id == department.Id))
+                if (await DbContext.Users.AnyAsync(u => u.Department.Id == department.Id).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Category tag is in use by an idea.");
                     return BadRequest(ErrorsList);

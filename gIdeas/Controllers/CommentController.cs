@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,9 +41,9 @@ namespace gIdeas.Controllers
             try
             {
                 /// check the database to see if a Comment with the same name exists
-                if (DbContext.Comments.Any(d => d.Description == newComment.Description
+                if (await DbContext.Comments.AnyAsync(d => d.Description == newComment.Description
                                              && d.User.Id == newComment.User.Id
-                                             && d.IdeaId == newComment.IdeaId))
+                                             && d.IdeaId == newComment.IdeaId).ConfigureAwait(false))
                 {
                     /// extract the errors and return bad request containing the errors
                     gAppConst.Error(ref ErrorsList, "Comment already exists.");
@@ -91,7 +92,7 @@ namespace gIdeas.Controllers
             try
             {
                 /// if the Comment record with the same id is not found
-                if (!DbContext.Comments.Any(d => d.Id == comment.Id))
+                if (!await DbContext.Comments.AnyAsync(d => d.Id == comment.Id).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Comment not found");
                     return BadRequest(ErrorsList);

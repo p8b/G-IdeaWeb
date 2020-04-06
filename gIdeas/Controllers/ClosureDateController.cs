@@ -60,7 +60,7 @@ namespace gIdeas.Controllers
             try
             {
                 
-                gClosureDates currentClosureDates = DbContext.ClosureDates.First(c => c.Year ==  newClosureDates.Year);
+                gClosureDates currentClosureDates = await DbContext.ClosureDates.FirstAsync(c => c.Year ==  newClosureDates.Year).ConfigureAwait(false);
 
                 if (currentClosureDates == null)
                 {

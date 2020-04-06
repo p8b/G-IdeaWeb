@@ -30,12 +30,13 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
         [HttpGet("[action]")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
+                await DbContext.PageViews.LoadAsync().ConfigureAwait(false);
                 /// return the list of Role ordered by name
-                return Ok(DbContext.PageViews.Take(DbContext.PageViews.Count()));
+                return Ok(DbContext.PageViews);
             }
             catch (Exception)
             {
@@ -66,7 +67,7 @@ namespace gIdeas.Controllers
                 }
                 catch (Exception) { }
 
-                gPageView currentPageView = DbContext.PageViews.First(p => p.PageName.Equals(requestedPageName, StringComparison.CurrentCultureIgnoreCase));
+                gPageView currentPageView = await DbContext.PageViews.FirstAsync(p => p.PageName.Equals(requestedPageName, StringComparison.CurrentCultureIgnoreCase)).ConfigureAwait(false);
 
                 if (currentPageView == null)
                 {

@@ -57,22 +57,25 @@ namespace Ideas.Controllers
                 int.TryParse(roleId, out int RoleId);
 
                 /// Populate the list of ideas to be returned
-                List<gIdea> IdeaList = await DbContext.Ideas.Include(i => CatTagId == 0 ? i.CategoriesToIdeas.Any() : i.CategoriesToIdeas.Any(ci => ci.CategoryId == CatTagId))
-                                                            .Include(i => DepId == 0 ? i.Author.Department.Id > 0 : i.Author.Department.Id == DepId)
-                                                            .Include(i => RoleId == 0 ? i.Author.Role.Id > 0 : i.Author.Role.Id == RoleId)
-                                                            .Include(i => ideaStatus == gAppConst.AllRecords ? i.Status.Any() : i.Status.Contains(ideaStatus))
+                List<gIdea> IdeaList = await DbContext.Ideas.AsNoTracking()
+                                                            .Include(i => i.CategoriesToIdeas)
+                                                            .Include(i => i.Author)
+                                                            .Where(i => CatTagId == 0 ? i.CategoriesToIdeas.Any() : i.CategoriesToIdeas.Any(ci => ci.CategoryId == CatTagId))
+                                                            .Where(i => DepId == 0 ? i.Author.Department.Id > 0 : i.Author.Department.Id == DepId)
+                                                            .Where(i => RoleId == 0 ? i.Author.Role.Id > 0 : i.Author.Role.Id == RoleId)
+                                                            .Where(i => ideaStatus == gAppConst.AllRecords ? i.Status.Any() : i.Status.Contains(ideaStatus))
                                                             .Where(i => i.CreatedDate.Year == submissionYear 
-                                                                    && !i.Author.IsBlocked && isAuthorAnon == gAppConst.AllRecords ? true : i.IsAnonymous.ToString().Equals(isAuthorAnon, StringComparison.CurrentCultureIgnoreCase)
-                                                                    && !i.IsBlocked)
+                                                                     && !i.Author.IsBlocked && isAuthorAnon == gAppConst.AllRecords ? true : i.IsAnonymous.ToString().Equals(isAuthorAnon, StringComparison.CurrentCultureIgnoreCase)
+                                                                     && !i.IsBlocked)
                                                             .ToListAsync()
                                                             .ConfigureAwait(false);
 
                 foreach (gIdea idea in IdeaList)
                 {
-                    idea.TotalThumbDowns = DbContext.Votes.Count(v => v.Thumb.Equals("Down"));
-                    idea.TotalThumbUps = DbContext.Votes.Count(v => v.Thumb.Equals("Up"));
+                    idea.TotalThumbDowns = await DbContext.Votes.CountAsync(v => v.Thumb.Equals("Down")).ConfigureAwait(false);
+                    idea.TotalThumbUps = await DbContext.Votes.CountAsync(v => v.Thumb.Equals("Up")).ConfigureAwait(false);
 
-                    string currentUserAccessClaim = User.Claims.FirstOrDefault(c => c.Type == gAppConst.AccessClaims.Type).Value;
+                    string currentUserAccessClaim = User.Claims.First(c => c.Type == gAppConst.AccessClaims.Type).Value;
                     if (idea.IsAnonymous && currentUserAccessClaim.Equals(gAppConst.AccessClaims.Staff))
                     {
                         idea.Author = new gUser { FirstName = "Anonymous", Surname = "Anonymous" };
@@ -140,8 +143,8 @@ namespace Ideas.Controllers
                     idea.FlaggedIdeas = new List<gFlaggedIdea>();
                 }
 
-                idea.TotalThumbDowns = DbContext.Votes.Count(v => v.Thumb.Equals("Down"));
-                idea.TotalThumbUps = DbContext.Votes.Count(v => v.Thumb.Equals("Up"));
+                idea.TotalThumbDowns = await DbContext.Votes.CountAsync(v => v.Thumb.Equals("Down")).ConfigureAwait(false);
+                idea.TotalThumbUps = await DbContext.Votes.CountAsync(v => v.Thumb.Equals("Up")).ConfigureAwait(false);
 
                 foreach (gComment comment in idea.Comments)
                     if(comment.IsAnonymous)
@@ -220,7 +223,6 @@ namespace Ideas.Controllers
         [Authorize(gAppConst.AccessPolicies.LevelFour)] /// Done MUST BE TESTED
         public async Task<IActionResult> Put([FromBody] gIdea modifiedIdea)
         {
-
             try
             {
                 /// if the idea record with the same id is not found
@@ -289,13 +291,13 @@ namespace Ideas.Controllers
             try
             {
                 /// if the idea record with the same id is not found
-                if (!DbContext.Ideas.Any(d => d.Id == ideaId))
+                if (!await DbContext.Ideas.AnyAsync(d => d.Id == ideaId).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Idea not found");
                     return BadRequest(ErrorsList);
                 }
 
-                gIdea idea = DbContext.Ideas.FirstOrDefault(i => i.Id == ideaId);
+                gIdea idea = await DbContext.Ideas.FirstAsync(i => i.Id == ideaId).ConfigureAwait(false);
 
                 idea.IsBlocked = isBlocked;
 
@@ -331,16 +333,16 @@ namespace Ideas.Controllers
             try
             {
                 /// if the idea record with the same id is not found
-                if (!DbContext.Ideas.Any(d => d.Id == ideaId))
+                if (!await DbContext.Ideas.AnyAsync(d => d.Id == ideaId).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Idea not found");
                     return BadRequest(ErrorsList);
                 }
 
-                int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
+                int.TryParse(User.Claims.First(c => c.Type == "UserId").Value, out int userId);
 
                 /// if the user's vote for the idea already exists
-                if (!DbContext.Votes.Any(v => v.IdeaId == ideaId && v.UserId == userId))
+                if (!await DbContext.Votes.AnyAsync(v => v.IdeaId == ideaId && v.UserId == userId).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Vote Already registered!");
                     return BadRequest(ErrorsList);

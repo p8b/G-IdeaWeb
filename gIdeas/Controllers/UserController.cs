@@ -45,44 +45,57 @@ namespace gIdeas.Controllers
         {
             try
             {
+                int.TryParse(roleId, out int RoleID);
+                int.TryParse(departmentId, out int DepartmentID);
+                int.TryParse(searchValue, out int userId);
                 //1.Check the search parameter and filters and return the appropriate user list
                 //      a.If search value is empty or null then return the filtered users
                 //          Note(Default value for parameters)
                 //                    searchValue = null
                 //ALL OTHER PARAMETERS = ***GET - ALL ***
-                List<gUser> userList;
+                List<gUser> userList = new List<gUser>();
                 /// populate the list to be returned
                 if (string.IsNullOrWhiteSpace(searchValue))
                 {
-
-                    userList = await DbContext.Users.Include(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id.ToString() == departmentId)
-                                                    .Include(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id.ToString() == roleId)
-                                                    .ToListAsync()
-                                                    .ConfigureAwait(false);
+                     await DbContext.Users.AsNoTracking()
+                                          .Include(u => u.Department)
+                                          .Include(u => u.Role)
+                                          .Where(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id == DepartmentID)
+                                          .Where(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id == RoleID)
+                                          .ForEachAsync(u =>
+                                          {
+                                              u.TotalNumberOfIdeas = DbContext.Ideas.AsNoTracking().Count(i => i.Author == u);
+                                              u.TotalNumberOfComments = DbContext.Comments.AsNoTracking().Count(i => i.User == u);
+                                              userList.Add(u);
+                                          })
+                                          .ConfigureAwait(false);
                 }
                 else
                 {
-                    int.TryParse(searchValue, out int userId);
-                    userList = await DbContext.Users.Where(u => u.Id == userId
-                                                             || u.FirstName.Contains(searchValue,StringComparison.CurrentCultureIgnoreCase) 
-                                                             || u.Surname.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)
-                                                             || u.Email.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
-                                                    .Include(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id.ToString() == departmentId)
-                                                    .Include(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id.ToString() == roleId)
-                                                    .ToListAsync()
-                                                    .ConfigureAwait(false);
+                    await DbContext.Users.AsNoTracking()
+                                         .Include(u => u.Department)
+                                         .Include(u => u.Role)
+                                         .Where(u => u.Id == userId
+                                                  || u.FirstName.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)
+                                                  || u.Surname.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)
+                                                  || u.Email.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
+                                         .Where(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id == DepartmentID)
+                                         .Where(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id == RoleID)
+                                         .ForEachAsync( u =>
+                                         {
+                                             u.TotalNumberOfIdeas = DbContext.Ideas.Count(i => i.Author == u);
+                                             u.TotalNumberOfComments = DbContext.Comments.Count(i => i.User == u);
+                                             userList.Add(u);
+                                         })
+                                         .ConfigureAwait(false);
                 }
 
-                foreach (gUser user in userList)
-                {
-                    user.TotalNumberOfIdeas = DbContext.Ideas.Count(i => i.Author == user);
-                    user.TotalNumberOfComments = DbContext.Comments.Count(i => i.User == user);
-                }
+                ;
 
                 /// return the list of Role ordered by name
                 return Ok(userList);
             }
-            catch (Exception)
+            catch (Exception ee)
             {
                 /// in the case any exceptions return the following error
                 gAppConst.Error(ref ErrorsList, "Server Error. Please Contact Administrator.");
@@ -115,14 +128,15 @@ namespace gIdeas.Controllers
                 }
 
                 /// check the database to see if a user with the same email exists
-                if (DbContext.Users.Any(d => d.Email == newUser.Email))
+                if (await DbContext.Users.AnyAsync(d => d.Email == newUser.Email).ConfigureAwait(false))
                 {
                     /// extract the errors and return bad request containing the errors
                     gAppConst.Error(ref ErrorsList, "Email already exists.");
                     return BadRequest(ErrorsList);
                 }
-                newUser.Department = DbContext.Departments.Find(newUser.Department.Id);
-                newUser.Role = DbContext.Roles.Find(newUser.Role.Id);
+                newUser.Department = await DbContext.Departments.FindAsync(newUser.Department.Id).ConfigureAwait(false);
+                newUser.Role = await DbContext.Roles.FindAsync(newUser.Role.Id).ConfigureAwait(false);
+
                 /// else user object is made without any errors
                 /// Create the new user
                 IdentityResult newUserResult = await UserManager.CreateAsync(newUser, newUser.PasswordHash)
@@ -195,15 +209,15 @@ namespace gIdeas.Controllers
                 }
 
                 /// if the user record with the same id is not found
-                if (!DbContext.Users.Any(u => u.Id == modifiedUser.Id))
+                if (!await DbContext.Users.AnyAsync(u => u.Id == modifiedUser.Id).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "User not found");
                     return BadRequest(ErrorsList);
                 }
-                modifiedUser.Department = DbContext.Departments.Find(modifiedUser.Department.Id);
-                modifiedUser.Role = DbContext.Roles.Find(modifiedUser.Role.Id);
+                modifiedUser.Department = await DbContext.Departments.FindAsync(modifiedUser.Department.Id).ConfigureAwait(false);
+                modifiedUser.Role = await DbContext.Roles.FindAsync(modifiedUser.Role.Id).ConfigureAwait(false);
                 /// find the current user details from the database
-                gUser userDetails = DbContext.Users.Find(modifiedUser.Id);
+                gUser userDetails = await DbContext.Users.FindAsync(modifiedUser.Id).ConfigureAwait(false);
 
                 /// update the user details with the new details
                 userDetails.FirstName = modifiedUser.FirstName;
@@ -292,8 +306,8 @@ namespace gIdeas.Controllers
         {
             try
             {
-                int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
-                if(modifiedUser.Id != userId)
+                int.TryParse(User.Claims.First(c => c.Type == "UserId").Value, out int userId);
+                if (modifiedUser.Id != userId)
                 {
                     gAppConst.Error(ref ErrorsList, "Not Authorised!");
                     return BadRequest(ErrorsList);
@@ -356,7 +370,7 @@ namespace gIdeas.Controllers
             try
             {
                 /// if the User record with the same id is not found
-                if (!DbContext.Users.Any(u => u.Id == thisUser.Id))
+                if (!await DbContext.Users.AnyAsync(u => u.Id == thisUser.Id).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "User not found");
                     return BadRequest(ErrorsList);
@@ -364,7 +378,7 @@ namespace gIdeas.Controllers
 
                 /// else the User is found
                 /// now delete the user record
-                DbContext.Users.Remove(DbContext.Users.Find(thisUser.Id));
+                DbContext.Users.Remove(await DbContext.Users.FindAsync(thisUser.Id).ConfigureAwait(false));
 
                 /// save the changes to the database
                 await DbContext.SaveChangesAsync().ConfigureAwait(false);
@@ -382,7 +396,7 @@ namespace gIdeas.Controllers
         private async Task<gUser> UpdatePassword(gUser SelectedUser)
         {
             /// find the current user details from the database
-            gUser userDetails = DbContext.Users.Find(SelectedUser.Id);
+            gUser userDetails = await DbContext.Users.FindAsync(SelectedUser.Id).ConfigureAwait(false);
 
             if (userDetails == null)
             {
@@ -401,7 +415,6 @@ namespace gIdeas.Controllers
             {
                 foreach (var item in result.Errors)
                     ErrorsList.Add(new gError(item.Code, item.Description));
-
                 return null;
             }
 

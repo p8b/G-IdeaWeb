@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +74,7 @@ namespace gIdeas.Controllers
                 }
 
                 /// check the database to see if a department with the same name exists
-                if (!DbContext.Categories.Any(d => d.Name == newCategory.Name))
+                if (!await DbContext.Categories.AnyAsync(d => d.Name == newCategory.Name).ConfigureAwait(false))
                 {
                     /// extract the errors and return bad request containing the errors
                     gAppConst.Error(ref ErrorsList, "Category already exists.");
@@ -113,14 +114,14 @@ namespace gIdeas.Controllers
             try
             {
                 /// if the Category record with the same id is not found
-                if (!DbContext.Categories.Any(d => d.Id == category.Id))
+                if (!await DbContext.Categories.AnyAsync(d => d.Id == category.Id).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Category not found");
                     return BadRequest(ErrorsList);
                 }
 
                 /// If the category is in use by any idea then do not allow delete
-                if (DbContext.CategoriesToIdeas.Any(c => c.CategoryId == category.Id))
+                if (await DbContext.CategoriesToIdeas.AnyAsync(c => c.CategoryId == category.Id).ConfigureAwait(false))
                 {
                     gAppConst.Error(ref ErrorsList, "Category tag is in use by an idea.");
                     return BadRequest(ErrorsList);
