@@ -6,9 +6,33 @@ import { Container } from 'reactstrap';
 class PageNotFound extends PureComponent {
     render() {
         return (
-            <Container>
-                <div className="page-header">404 PageNotFoundFound</div>
-            </Container>
+            <div>
+                <section class="py-5">
+                    <div class="container-fluid" >
+                        <div class="container-fluid text-center" >
+                            <div class="row content">
+                                <div class="col-sm-2">
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <p><a href="/Home" >Home</a></p>
+                                    <p><a href="/Faculties">Departments</a></p>
+                                </div>
+                                <div class="col-sm-8 text-left">
+                                    <h1>Page not found</h1><br />
+                                    <h4>Sorry, but the page you were expecting to see could not be found.</h4>
+                                    <p>
+                                        <ul>
+                                            <li>Please check the spelling of the web address you are looking for.</li>
+                                            <li>The navigation links on the left will redirect you to different areas of Gre-Ideas.</li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         );
     }
 }

@@ -11,7 +11,6 @@ class ViewIdea extends PureComponent {
         this.state = {
             count: 0
         }
-
         this.handleClick = this.handleClick.bind(this); 
     }
     async ComponentDidMount() {

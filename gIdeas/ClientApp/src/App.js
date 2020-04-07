@@ -22,6 +22,9 @@ import TeamMembers from './Pages/TeamMembers/TeamMembers';
 import NavMenu from './components/Layout/NavMenu';
 import Footer from './components/Layout/Footer';
 import NewIdea from './Pages/NewIdea/NewIdea';
+import Departments from './Pages/Departments/Departments';
+import TermsAndCon from './Pages/TermsAndCon/TermsAndCon';
+
 
 /// App component which is the main component in the application
 /// which includes the navigation bar, main body (Page Components)
@@ -43,13 +46,18 @@ const App = () => {
                 <CustomRoute exact path='/TeamMembers' Render={(props) => <TeamMembers {...props} />} />
                 <CustomRoute exact path='/Logout' Render={(props) => <Logout {...props} />} />
 
+                {/** Temporarily unprotected for viewing purposes */}
+                <CustomRoute exact path='/Departments' Render={(props) => <Departments {...props} />} />
+                <CustomRoute path='/ViewIdea' Render={(props) => <ViewIdea {...props} />} />
+                <CustomRoute exact path='/NewIdea' Render={(props) => <NewIdea {...props} />} />
+                <CustomRoute exact path='/TermsAndCon' Render={(props) => <TermsAndCon {...props} />} />
+
+
                 {/** Protected Routes */}
                 <ProtectedRoute exact path='/AddCategory' Render={(props) => <AddCategory {...props} />} />
                 <ProtectedRoute exact path='/BrowseIdea' Render={(props) => <BrowseIdea {...props} />} />
                 <ProtectedRoute exact path='/UserManagement' Render={(props) => <SearchUser {...props} />} />
-                <ProtectedRoute path='/ViewIdea' Render={(props) => <ViewIdea {...props} />} />
                 <ProtectedRoute exact path='/Statistics' Render={(props) => <Statistics {...props} />} />
-                <ProtectedRoute exact path='/NewIdea' Render={(props) => <NewIdea {...props} />} />
 
                 {/** All Other Routes */}
                 <CustomRoute path='*' Render={(props) => <PageNotFound {...props} />} />
