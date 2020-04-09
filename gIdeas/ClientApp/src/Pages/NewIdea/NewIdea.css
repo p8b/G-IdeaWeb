@@ -68,3 +68,8 @@
     color: #cc0000;
     margin-bottom: 12px;
 }
+
+
+.footer {
+    display: none;
+}

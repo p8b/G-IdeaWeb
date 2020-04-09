@@ -1,0 +1,36 @@
+﻿
+
+
+
+.view-container {
+    width: 100%;
+    height: 100%;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+.img-header {
+    background-image: url('https://analytics.jiscinvolve.org/wp/files/2017/11/GREENWICH-MAIN-LAWN-FINAL.png') !important;
+    width: 100%;
+    height: 250px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.page-header {
+    background: #606eb2;
+    color: #fff;
+    padding-top: 0.9375rem !important;
+    padding-right: 0.9375rem !important;
+    padding-bottom: 0.9375rem !important;
+    padding-left: 0.9375rem !important;
+    margin: 100px;
+    width: 40%;
+    position: absolute;
+    left: 80px;
+    top: 130px
+}
+

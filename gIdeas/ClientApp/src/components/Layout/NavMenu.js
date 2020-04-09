@@ -24,8 +24,9 @@ class NavMenu extends PureComponent {
         this.state = {
             /// use to make the small screen navigation menu visibility
             smScreenNavIsOpen: false,
-            currentNavItems: []
+            currentNavItems: [],
         };
+
 
         // used for auto hiding navbar and its drop-down list
         // for small screens
@@ -75,6 +76,7 @@ class NavMenu extends PureComponent {
             } catch (e) { }
         }
     }
+
     // Used to change the mobile nav span icon
     toggleNavbar() {
         this.setState({
@@ -83,7 +85,7 @@ class NavMenu extends PureComponent {
     }
 
 
-    render() {
+    render() { 
         let CurrentNavItems = [];
         console.log(this.props.Authentication.accessClaim)
         /// Check which menu items to show for the user

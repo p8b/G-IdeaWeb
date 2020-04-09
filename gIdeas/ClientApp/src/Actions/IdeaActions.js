@@ -1,5 +1,6 @@
 ﻿import { apiCaller, AllRecords } from '../components/_MainApp/appConst';
-import { gIdea } from '../components/_MainApp/Models';
+import { gIdea, gError } from '../components/_MainApp/Models';
+ 
 
 export const getFilterdAndSortedIdeas = (
     submissionYear = new Date().getUTCFullYear(),

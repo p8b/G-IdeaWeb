@@ -12,7 +12,9 @@ export const getAllCategories= () => {
             switch (response.status) {
                 case 200: // Ok Response
                     await response.json().then(data => {
-                        state.categories = data;
+                        data.map(category => {
+                            state.categories.push (new gCategoryTag(category))
+                        })
                     }).catch(e => { })
                     break;
                 case 400: //Bad Response

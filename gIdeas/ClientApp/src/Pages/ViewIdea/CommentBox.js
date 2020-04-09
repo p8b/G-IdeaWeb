@@ -25,12 +25,13 @@ class CommentBox extends PureComponent {
                         </div>
                     </div>
                     <div className="comment-form-actions">
-                        <button type="submit" variant="outline-primary" onClick={this._postComment.bind(this)}>Submit Comment</button>
+                        <button class="grebutton" type="submit" variant="outline-primary" onClick={this._postComment.bind(this)}>Submit Comment</button>
                     </div>
-                </form>
-                <button id="comment-reveal" type="button" onClick={() => this.setState({ showComments: !this.state.showComments })}>
+                <button class="grebutton" type="button" onClick={() => this.setState({ showComments: !this.state.showComments })}>
                     {this.state.showComments ? 'Hide Comments' : 'View Comments'}
-                </button>
+                    </button>
+                </form>
+
                 <h4>Comments</h4>
                 <h5 className="comment-count">
                     {this.state.comments.length == 0 ? 'No Comments yet' : `${this.state.comments.length} comments`}
