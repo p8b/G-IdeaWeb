@@ -3,23 +3,27 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container } from 'reactstrap';
 
+import "./PageNotFound.css";
+
+
 class PageNotFound extends PureComponent {
     render() {
         return (
             <div>
+
+
                 <section class="py-5">
-                    <div class="container-fluid" >
+                    <div class="container-fluid pnfcontainer" >
+                         <div className="img-header">
+                    <div className="page-header">Page not found</div>
+                </div> <br/>
                         <div class="container-fluid text-center" >
                             <div class="row content">
                                 <div class="col-sm-2">
-                                    <br />
-                                    <br />
-                                    <br />
                                     <p><a href="/Home" >Home</a></p>
                                     <p><a href="/Faculties">Departments</a></p>
                                 </div>
                                 <div class="col-sm-8 text-left">
-                                    <h1>Page not found</h1><br />
                                     <h4>Sorry, but the page you were expecting to see could not be found.</h4>
                                     <p>
                                         <ul>

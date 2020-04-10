@@ -73,7 +73,7 @@ class ViewIdea extends PureComponent {
                             <div className="col-4">
                                 <CardSubtitle>{idea.CategoriesToIdeas}</CardSubtitle></div>
                             <div className="col-3">
-                                <CardSubtitle>{idea.Author}</CardSubtitle></div>
+                                <CardSubtitle>Author's idea</CardSubtitle></div>
                             </div>
 
                         </CardBody>

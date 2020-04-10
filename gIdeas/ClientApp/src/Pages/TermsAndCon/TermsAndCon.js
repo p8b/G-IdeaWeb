@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container } from 'reactstrap';
 
+import "./TermsAndCon.css";
+
+
 class TermsAndCon extends PureComponent {
     constructor(props) {
         super(props);
@@ -11,22 +14,19 @@ class TermsAndCon extends PureComponent {
 
     }
     render() {
-        return (
-            <div container-fluid>
-                <div className="termsForm">
+        return (   
 
+            <div class="termscontainer container-fluid" >
+                        <div className="img-header">
+                            <div className="page-header">Terms and conditions</div>
+                        </div> <br />
 
-                    <div className="termImgHead">
-                        <div className="termTitleHead font-header">Terms and Conditions</div>
-                    </div>
-                    <br />
-
-                    <div>
+                <div>
                         <p>
                             Please read these terms of use carefully before you start to use a site. We recommend that you print a copy of this for future reference.
                             By using Gre Ideas, you confirm that you accept these terms of use and that you agree to comply with them.
                     If you do not agree to these terms of use, you must not use this site.</p>
-                        <h4>Anonymous posts</h4>
+                       <h4>Anonymous posts</h4>
                         <p>A record from authors who post ideas and comments anonymously will be monitored and used by managers to facilitate the
                     correct following of these guidelines.</p>
                         <h4>Your account and password</h4>
@@ -43,7 +43,6 @@ class TermsAndCon extends PureComponent {
                         </ul>
                         </p></div>
                 </div>
-            </div>
         );
     }
 }
