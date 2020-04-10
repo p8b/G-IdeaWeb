@@ -180,11 +180,10 @@ namespace Ideas.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
         [Authorize(gAppConst.AccessPolicies.LevelFour)] /// Done MUST BE TESTED
-        public async Task<IActionResult> Post([FromBody] dynamic test)
+        public async Task<IActionResult> Post([FromBody]  gIdea newIdea)
         {
             try
             {
-                gIdea newIdea = (gIdea)test;
                 int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
                 newIdea.Author = await DbContext.Users.Include(u => u.Role)
                                                       .Include(u => u.Department)
@@ -214,6 +213,17 @@ namespace Ideas.Controllers
                 DbContext.Ideas.Add(newIdea);
                 /// save the changes to the data base
                 await DbContext.SaveChangesAsync().ConfigureAwait(false);
+
+                if (newIdea.Id > 0 && newIdea.CategoryTags.Count() > 0)
+                {
+                    newIdea.CategoriesToIdeas = new List<gCategoriesToIdeas>();
+                    foreach (var item in newIdea.CategoryTags)
+                    {
+                        newIdea.CategoriesToIdeas.Add(new gCategoriesToIdeas {CategoryId = item.Id, IdeaId =newIdea.Id });
+                    }
+                    DbContext.CategoriesToIdeas.AddRange(newIdea.CategoriesToIdeas);
+                    await DbContext.SaveChangesAsync().ConfigureAwait(false);
+                }
 
                 /// return 201 created status with the new object
                 /// and success message

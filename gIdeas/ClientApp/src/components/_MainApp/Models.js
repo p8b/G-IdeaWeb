@@ -141,9 +141,8 @@ export class gIdea {
     ClosureDate = new Date();
     IsAnonymous = false;
     ViewCount = 0;
-    Autor = "";
+    Author = "";
     FileBlobStringBase64 = "";
-    //Documents = [];
     Comments = [];
     FlaggedIdeas = [];
     Votes = [];

@@ -181,6 +181,7 @@ class BrowseIdea extends PureComponent {
 
         return (
             <Container className="custom-container">
+                <div className="page-header">Browse Ideas</div>
                 {/* Record Page view of current page */}
                 <RecordPageView IdeaId="0" />
 

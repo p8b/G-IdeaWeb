@@ -1,0 +1,65 @@
+﻿
+
+.grebutton {
+    background: rgb(96, 110, 178);
+    border: 0;
+    padding: 12.24px 28.8px;
+    color: #FFFFFF;
+    float: right;
+    font-size: 14.4px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 0px;
+    margin: 25px;
+}
+
+    .grebutton:hover,
+    .grebutton:active,
+    .grebutton:focus {
+        background: rgb(46, 46, 46);
+    }
+
+.btn-primary {
+    color: #fff;
+    background-color: #606eb2;
+}
+
+.btn-changed {
+    padding: 7px 16px;
+    border-radius: 0px;
+    margin: 25px;
+}
+
+.ideaForm {
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgb(96, 110, 178);
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+.img-header {
+    background-image: url('https://www.gre.ac.uk/__data/assets/image/0019/1138060/gr-domes-lawn.jpg');
+    width: 100%;
+    height: 250px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.page-header {
+    background: #606eb2;
+    color: #fff;
+    padding-top: 0.9375rem !important;
+    padding-right: 0.9375rem !important;
+    padding-bottom: 0.9375rem !important;
+    padding-left: 0.9375rem !important;
+}
+
+.errorMsg {
+    color: #cc0000;
+    margin-bottom: 12px;
+}

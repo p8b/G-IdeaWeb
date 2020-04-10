@@ -80,7 +80,7 @@ export const postNewIdea = (newIdea = new gIdea()) => {
             errors: []
         };
         try {
-            const response = await apiCaller.post("idea/post", newIdea);
+            const response = await apiCaller.post("ideas/post", newIdea);
             switch (response.status) {
                 case 201: // Created Response
                     await response.json().then(data => {
