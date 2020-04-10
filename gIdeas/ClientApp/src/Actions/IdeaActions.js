@@ -24,7 +24,7 @@ export const getFilterdAndSortedIdeas = (
                         state.Ideas = data;
                     }).catch(e => { console.log(e) })
                     break;
-                case 400: //Bad Response
+                case 400: // Bad Response
                     await response.json().then(data => {
                         state.errors = data;
                     }).catch(e => { console.log(e) })

@@ -89,3 +89,9 @@ textarea {
     .grebutton:focus {
         background: rgb(46, 46, 46);
     }
+
+.btn-changed {
+    padding: 7px 16px;
+    border-radius: 0px;
+    margin: 25px;
+}
