@@ -60,7 +60,7 @@ export const logout = () => {
     }
 }
 
-export const silentAuthentication = (currentAuthentication) => {
+export const silentAuthentication = (currentAuthentication, user) => {
     return async dispatch => {
         let state = {
             type: 'SILENT_ATHENTICATION',
@@ -90,6 +90,7 @@ export const silentAuthentication = (currentAuthentication) => {
                 default:
                     if (currentAuthentication)
                         dispatch(state);
+                    if (user)
                     break;
             };
         } catch (e) {

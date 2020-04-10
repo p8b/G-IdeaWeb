@@ -17,20 +17,16 @@ class CommentBox extends PureComponent {
         return (
             <div className="comment-box">
                 <h3 className="text-center">Share your opinion</h3>
-                <form className="comment-form">
                     <div className="comment-form-fields">
-                        <input size="30" placeholder="Author's name from database" required ref={(input) => this._author = input}></input><br />
-                        <div>
                             <textarea placeholder="Write a comment" rows="4" required ref={(textarea) => this._body = textarea}></textarea>
-                        </div>
                     </div>
                     <div className="comment-form-actions">
-                        <button type="submit" variant="outline-primary" onClick={this._postComment.bind(this)}>Submit Comment</button>
+                        <button class="grebutton" type="submit" variant="outline-primary" onClick={this._postComment.bind(this)}>Submit Comment</button>
                     </div>
-                </form>
-                <button id="comment-reveal" type="button" onClick={() => this.setState({ showComments: !this.state.showComments })}>
-                    {this.state.showComments ? 'Hide Comments' : 'View Comments'}
-                </button>
+                    <button class="grebutton" type="button" onClick={() => this.setState({ showComments: !this.state.showComments })}>
+                        {this.state.showComments ? 'Hide Comments' : 'View Comments'}
+                    </button>
+
                 <h4>Comments</h4>
                 <h5 className="comment-count">
                     {this.state.comments.length == 0 ? 'No Comments yet' : `${this.state.comments.length} comments`}
@@ -55,9 +51,9 @@ class CommentBox extends PureComponent {
         event.preventDefault();   // prevents page from reloading on submit
         const comment = new gComment({ comment: this._body.value, user: this.props.Authentication.user });
 
-        await 
+        await
 
-        this.setState({ comments: this.state.comments.concat([comment]) }); // *new array references help React stay fast, so concat works better than push here.
+            this.setState({ comments: this.state.comments.concat([comment]) }); // *new array references help React stay fast, so concat works better than push here.
     }
     _reportComment() {
     }

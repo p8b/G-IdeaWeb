@@ -24,7 +24,9 @@ class Home extends PureComponent {
             <Container className="custom-container">
                 {/* Record Page view of current page */}
                 <RecordPageView IdeaId="0" />
-                <div className="page-header">Home</div>
+                <div className="img-header mb-3">
+                    <div className="page-header">Home</div>
+                </div>
                 <Row>
                     <div className="col-12 col-md-4 p-3">
                         {this.props.Authentication.isAuthenticated &&

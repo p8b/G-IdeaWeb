@@ -91,7 +91,6 @@ class NewIdea extends PureComponent {
         this.setState({
             btn: <a href={h} className="btn custom-btn" download="Documents.zip">Documents.zip</a>
         });
-        console.log(result.newIdea);
     }
     CateroryOnSelect(e) {
         this.state.selectedCategories = e;

@@ -121,8 +121,12 @@ namespace Ideas.Controllers
             {
                 /// find the specified idea
                 gIdea idea = await DbContext.Ideas.Include(i=> i.Author)
+                                                  .ThenInclude(a => a.Department)
+                                                  .Include(i => i.Author)
+                                                  .ThenInclude(a => a.Role)
                                                   .Include(i=> i.CategoriesToIdeas)
                                                   .Include(i=> i.Comments)
+                                                  .ThenInclude(c => c.User)
                                                   .Include(i=> i.FlaggedIdeas)
                                                   .FirstOrDefaultAsync(i => i.Id == ideaId )
                                                   .ConfigureAwait(false);
@@ -154,6 +158,12 @@ namespace Ideas.Controllers
 
                 idea.TotalThumbDowns = await DbContext.Votes.CountAsync(v => v.Thumb.Equals("Down")).ConfigureAwait(false);
                 idea.TotalThumbUps = await DbContext.Votes.CountAsync(v => v.Thumb.Equals("Up")).ConfigureAwait(false);
+
+                idea.CategoryTags = new List<gCategoryTag>();
+                foreach (var item in idea.CategoriesToIdeas)
+                {
+                    idea.CategoryTags.Add(await DbContext.Categories.FindAsync(item.CategoryId).ConfigureAwait(false));
+                }
 
                 foreach (gComment comment in idea.Comments)
                     if(comment.IsAnonymous)
@@ -348,11 +358,10 @@ namespace Ideas.Controllers
         /// </summary>
         /// </param>
         #region *** 200 Ok, 400 BadRequest ***
-        [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [HttpPost("post/vote/{ideaId}/{upOrDown}")]
+        [HttpGet("[action]/vote/{ideaId}/{upOrDown}")]
         [Authorize(gAppConst.AccessPolicies.LevelFour)] /// Done 
         public async Task<IActionResult> PostVote(int ideaId, bool upOrDown)
         {
@@ -369,8 +378,17 @@ namespace Ideas.Controllers
                 int.TryParse(User.Claims.First(c => c.Type == "UserId").Value, out int userId);
 
                 /// if the user's vote for the idea already exists
-                if (!await DbContext.Votes.AnyAsync(v => v.IdeaId == ideaId && v.UserId == userId).ConfigureAwait(false))
+                if (await DbContext.Votes.AnyAsync(v => v.IdeaId == ideaId && v.UserId == userId).ConfigureAwait(false))
                 {
+                    var currentVote = await DbContext.Votes.FirstAsync(v => v.IdeaId == ideaId && v.UserId == userId).ConfigureAwait(false);
+                    if (!currentVote.Thumb.Equals(upOrDown ? "Up" : "Down", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        currentVote.Thumb = upOrDown ? "Up" : "Down";
+                        DbContext.Votes.Update(currentVote);
+                        await DbContext.SaveChangesAsync().ConfigureAwait(false);
+                        return Ok(currentVote);
+                    }
+
                     gAppConst.Error(ref ErrorsList, "Vote Already registered!");
                     return BadRequest(ErrorsList);
                 }
@@ -381,15 +399,24 @@ namespace Ideas.Controllers
                     UserId = userId,
                     Thumb = upOrDown ? "Up" : "Down"
                 };
+                try
+                {
 
-                /// save the changes to the database
-                DbContext.Votes.Update(vote);
-                await DbContext.SaveChangesAsync().ConfigureAwait(false);
-                
+                    /// save the changes to the database
+                    DbContext.Votes.Update(vote);
+                    await DbContext.SaveChangesAsync().ConfigureAwait(false);
+
+                }
+                catch (Exception)
+                {
+                    /// save the changes to the database
+                    await DbContext.Votes.AddAsync(vote).ConfigureAwait(false);
+                    await DbContext.SaveChangesAsync().ConfigureAwait(false);
+                }
                 /// thus return 200 ok status with the updated object
                 return Ok(vote);
             }
-            catch (Exception) // DbUpdateException, DbUpdateConcurrencyException
+            catch (Exception ee) // DbUpdateException, DbUpdateConcurrencyException
             {
                 /// Add the error below to the error list and return bad request
                 gAppConst.Error(ref ErrorsList, $"Server Error. Please Contact Administrator.");

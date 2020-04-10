@@ -59,12 +59,16 @@ export class gComment {
         user: new gUser(),
         submissionDate: new Date(),
     }) {
-        this.Id = comment.id;
-        this.Description = comment.description;
-        this.IsAnonymous = comment.isAnonymous;
-        this.IdeaId = comment.ideaId;
-        this.User = new gUser(comment.user);
-        this.SubmissionDate = comment.submissionDate;
+        try {
+            this.Id = comment.id;
+            this.Description = comment.description;
+            this.IsAnonymous = comment.isAnonymous;
+            this.IdeaId = comment.ideaId;
+            this.User = new gUser(comment.user);
+            this.SubmissionDate = comment.submissionDate;
+        } catch (e) {
+
+        }
     }
 }
 
@@ -288,21 +292,25 @@ export class gUser {
         totalNumberOfIdeas : 0,
         totalNumberOfComments : 0,
     }) {
-        this.Id = user.id;
-        this.FirstName = user.firstName;
-        this.Surname = user.surname;
-        this.Email = user.email;
-        this.Department = new gDepartment(user.department);
-        this.Role = new gRole(user.role);
-        this.IsBlocked = user.isBlocked;
-        this.Ideas = user.ideas;
-        this.Comments = user.comments;
-        this.FlaggedIdeas = user.flaggedIdeas;
-        this.LoginRecords = user.loginRecords;
-        this.LastLoginDate = user.lastLoginDate;
-        this.NewPassword = user.newPassword;
-        this.TotalNumberOfIdeas = user.totalNumberOfIdeas;
-        this.TotalNumberOfComments = user.totalNumberOfComments;
+        try {
+            this.Id = user.id;
+            this.FirstName = user.firstName;
+            this.Surname = user.surname;
+            this.Email = user.email;
+            this.Department = new gDepartment(user.department);
+            this.Role = new gRole(user.role);
+            this.IsBlocked = user.isBlocked;
+            this.Ideas = user.ideas;
+            this.Comments = user.comments;
+            this.FlaggedIdeas = user.flaggedIdeas;
+            this.LoginRecords = user.loginRecords;
+            this.LastLoginDate = user.lastLoginDate;
+            this.NewPassword = user.newPassword;
+            this.TotalNumberOfIdeas = user.totalNumberOfIdeas;
+            this.TotalNumberOfComments = user.totalNumberOfComments;
+        } catch (e) {
+
+        }
     }
 }
 

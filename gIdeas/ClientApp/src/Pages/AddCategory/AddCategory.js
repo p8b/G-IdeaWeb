@@ -68,8 +68,10 @@ class AddCategory extends PureComponent {
             <Container className="custom-container">
                 {/* Record Page view of current page */}
                 <RecordPageView IdeaId="0" />
-
-                <h2 className="page-header">My Gre Ideas Categories</h2>
+                
+                <div className="img-header mb-3">
+                    <div className="page-header">My Gre Ideas Categories</div>
+                </div>
                 <Row className="justify-content-sm-center">
                     <div className="col-12 col-md-6">
                         <div className="col-12 mb-4">

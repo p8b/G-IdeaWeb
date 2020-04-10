@@ -2,19 +2,19 @@
     max-width: 100%;
     color: #fff;
     background-color: #2a1564;
-    border-radius: 0.875rem;
+    border-radius: 0;
     padding: 0.2rem 1rem 2rem;
 }
 
 .comment-form {
     background-color: #F8F9F9;
-    border-radius: 0.25rem;
+    border-radius: 0;
     padding: 1rem;
     margin-bottom:1rem;
 }
 
 .comment-form-fields {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
     max-width: 100%;
 }
     .comment-form-fields:focus {
@@ -36,11 +36,11 @@ textarea {
     color: #808080;
 }
 
-#comment-reveal {
+/*#comment-reveal {
     float: right;
     background-color: #0094ff;
     color: #fff;
-}
+}*/
 
 .comment {
     border-top: 0.125rem solid #0094ff;
@@ -69,4 +69,29 @@ textarea {
 .authorLabel{
     font-size: 17.5px;
     color:black;
+}
+
+
+.grebutton {
+    background: rgb(96, 110, 178);
+    border: 0;
+    padding: 12.24px 28.8px;
+    color: #FFFFFF;
+    float: right;
+    font-size: 14.4px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .grebutton:hover,
+    .grebutton:active,
+    .grebutton:focus {
+        background: rgb(46, 46, 46);
+    }
+
+.btn-changed {
+    padding: 7px 16px;
+    border-radius: 0px;
+    margin: 25px;
 }

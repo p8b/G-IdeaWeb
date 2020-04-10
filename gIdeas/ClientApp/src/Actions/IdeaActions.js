@@ -49,11 +49,14 @@ export const getIdea = (ideaId = 0) => {
             errors: [],
         };
         try {
-            const response = await apiCaller.get(`idea/get/${ideaId}`);
+            const response = await apiCaller.get(`ideas/get/${ideaId}`);
             switch (response.status) {
                 case 200: // Ok Response
-                    await response.json().then(data => {
+                    await response.json().then(data => 
+                    {
+                        console.log(data)
                         state.Idea = new gIdea(data);
+                        console.log(state.Idea)
                     }).catch(e => { console.log(e) })
                     break;
                 case 400: //Bad Response
@@ -111,9 +114,9 @@ export const postNewVote = (ideaId = 0, thumbUpOrDown = true) => {
             errors: []
         };
         try {
-            const response = await apiCaller.post("PATH", ideaId);
+            const response = await apiCaller.get(`ideas/PostVote/vote/${ideaId}/${thumbUpOrDown}`);
             switch (response.status) {
-                case 201: // Created Response
+                case 200: // Created Response
                     state.isSuccessful = true;
                     break;
                 case 400: //Bad Response

@@ -11,7 +11,11 @@ import { silentAuthentication } from '../../Actions/AuthenticationActions';
 /// props values is received from the app.js component
 const CustomRoute = props => {
     //silent Authentication check
-    props.silentAuthentication(props.Authentication.isAuthenticated);
+    try {
+        props.silentAuthentication(props.Authentication.isAuthenticated, props.Authentication.user);
+    } catch (e) {
+        props.silentAuthentication(props.Authentication.isAuthenticated);
+    }
     return (<Route path={props.path} render={props.Render} />);
 }
 

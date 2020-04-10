@@ -6,7 +6,7 @@ namespace gIdeas.Models
     public class gDepartment
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
 
         [DataType("nvarchar(256)")]
         [Required(ErrorMessage ="Name is required.")]

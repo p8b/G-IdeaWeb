@@ -12,7 +12,7 @@ namespace gIdeas.Models
     public class gRole
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
 
         #region **** Attributes nvarchar(256), Required, StringLength 256 ****
         [Column(TypeName = "nvarchar(256)")]

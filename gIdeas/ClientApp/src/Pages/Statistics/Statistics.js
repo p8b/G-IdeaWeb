@@ -91,7 +91,9 @@ class Statistics extends PureComponent {
         const { accordion1, accordion2, accordion3, accordion4 } = this.state;
         return (
             <Container className="custom-container">
-                <div className="page-header">Statistics</div>
+                <div className="img-header mb-3">
+                    <div className="page-header">Statistics</div>
+                </div>
                 <RecordPageView IdeaId="0" />
                 <div className="accordion">
                     {/* card one */}

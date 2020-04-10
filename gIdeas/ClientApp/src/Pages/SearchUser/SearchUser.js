@@ -85,7 +85,10 @@ class SearchUser extends PureComponent {
             <Container className="custom-container">
                 {/* Record Page view of current page */}
                 <RecordPageView IdeaId="0" />
-                <div className="page-header">User Management</div>
+
+                <div className="img-header mb-3">
+                    <div className="page-header">User Management</div>
+                </div>
                 <Row>
                     <div className="col-12 col-md-3 side-bar  pt-md-5 mb-md-5 pb-md-5">
                         <input onChange={(e) => { this.state.searchValue = e.target.value }}
