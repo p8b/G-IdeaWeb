@@ -49,7 +49,9 @@ namespace gIdeas.Controllers
                     gAppConst.Error(ref ErrorsList, "Comment already exists.");
                     return BadRequest(ErrorsList);
                 }
-                
+
+                newComment.User = await DbContext.Users.Include(u=>u.Department).Include(u=>u.Role).FirstAsync(u => u.Id == newComment.User.Id).ConfigureAwait(false);
+                ModelState.Remove("User.PasswordHash");
                 /// if model validation failed
                 if (!TryValidateModel(newComment))
                 {

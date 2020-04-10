@@ -56,6 +56,7 @@ namespace gIdeas.Models
 
         [JsonIgnore]
         public ICollection<gIdea> Ideas { get; set; }
+        [JsonIgnore]
         public ICollection<gComment> Comments { get; set; }
         public ICollection<gFlaggedIdea> FlaggedIdeas { get; set; }
         [ForeignKey("UserId"), Column(Order = 0)]

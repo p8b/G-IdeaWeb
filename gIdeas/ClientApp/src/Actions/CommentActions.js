@@ -1,19 +1,17 @@
-﻿import { gError, gComment } from "../../components/_MainApp/Models";
+﻿import { gError, gComment } from "../components/_MainApp/Models";
 import { apiCaller } from '../components/_MainApp/appConst';
 
 export const postComment = (comment = new gComment()) => {
     return async dispatch => {
         let state = {
-            comment: new gComment(),
+            isSuccess: false,
             errors: []
         };
         try {
             const response = await apiCaller.post("comment/post", comment);
             switch (response.status) {
                 case 201: // Created Response
-                    await response.json().then(data => {
-                        state.comment = new gComment(data);
-                    }).catch(e => { console.log(e) })
+                        state.isSuccess = true;
                     break;
                 case 400: //Bad Response
                     await response.json().then(data => {
