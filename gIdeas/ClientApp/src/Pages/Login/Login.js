@@ -5,8 +5,7 @@ import { Link, Redirect } from "react-router-dom";
 import { authenticate } from "../../Actions/AuthenticationActions";
 import "./Login.css";
 import "./GreUni.jpg";
-
-
+import RecordPageView from "../../components/RecordPageView";
 
 class Login extends PureComponent {
     constructor(props) {
@@ -29,6 +28,8 @@ class Login extends PureComponent {
         /// Else the user is not logged-in thus return the login page JSX 
         return (
             <div className="login-img-container">
+                {/* Record Page view of current page */}
+                <RecordPageView IdeaId="0"/>
                 <div className='login-bg-img'>
                     {/***** Login Container ****/}
                     <div align="right" className="login-container m-shadow-box">
@@ -106,7 +107,6 @@ class Login extends PureComponent {
 /// Mapping the redux state with component's properties
 const mapStateToProps = (state) => {
     return {
-        NavAndFooterVisibility: state.NavAndFooterVisibility,
         Authentication: state.Authentication
     }
 };

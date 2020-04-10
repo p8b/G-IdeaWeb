@@ -1,4 +1,6 @@
-﻿/// This method is used to get the value of the a cookie by passing it the cookie's name
+﻿import { gRole } from "./Models";
+
+/// This method is used to get the value of the a cookie by passing it the cookie's name
 export const getCookieValue = (name) => {
     try {
         /// Get the cookie values from the document and split them
@@ -26,7 +28,12 @@ export const AccessClaims = {
     QACoordinator: "QACoordinator",
     Staff: "Staff"
 }
-
+export const AllRoles = [
+    new gRole({ id: 1, name: "Admin" }),
+    new gRole({ id: 2, name: "Staff" }),
+    new gRole({ id: 3, name: "QA Coordinator" }),
+    new gRole({ id: 4, name: "QA Mananger" }),
+]
 export const IdeaStatus = {
     Pending: "Pending",
     FirstClosure: "FirstClosure",
@@ -88,4 +95,36 @@ export class apiCaller {
             method: "GET",
         }).catch(err => console.log(err));
     }
+}
+
+/// Code used from https://www.isummation.com/blog/convert-arraybuffer-to-base64-string-and-vice-versa/
+export const ArrayBufferToBase64 = (buffer) => {
+    console.log(buffer);
+    var binary = '';
+    var bytes = new Uint8Array(buffer);
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+}
+
+export const Base64ToArrayBuffer = (base64) => {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+export const StringBase64ToBlob = (base64) => {
+    var byteCharacters = window.atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray]);
 }

@@ -54,6 +54,7 @@ namespace gIdeas.Models
 
         public bool IsBlocked { get; set; } = false;
 
+        [JsonIgnore]
         public ICollection<gIdea> Ideas { get; set; }
         public ICollection<gComment> Comments { get; set; }
         public ICollection<gFlaggedIdea> FlaggedIdeas { get; set; }

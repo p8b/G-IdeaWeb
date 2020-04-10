@@ -1,5 +1,5 @@
 ﻿import { apiCaller, AllRecords } from '../components/_MainApp/appConst';
-import { gIdea } from '../components/_MainApp/Models';
+import { gIdea, gError } from '../components/_MainApp/Models';
 
 export const getFilterdAndSortedIdeas = (
     submissionYear = new Date().getUTCFullYear(),
@@ -16,11 +16,13 @@ export const getFilterdAndSortedIdeas = (
             errors: [],
         };
         try {
-            const response = await apiCaller.get(`idea/get/${submissionYear}/${categoryTagId}/${departmentId}/${roleId}/${ideaStatus}/${isAuthorAnon}`);
+            const response = await apiCaller.get(`ideas/get/${submissionYear}/${categoryTagId}/${departmentId}/${roleId}/${ideaStatus}/${isAuthorAnon}`);
             switch (response.status) {
                 case 200: // Ok Response
                     await response.json().then(data => {
-                        state.Ideas = data;
+                        data.map(i => {
+                            state.Ideas.push(new gIdea(i))
+                        })
                     }).catch(e => { console.log(e) })
                     break;
                 case 400: //Bad Response

@@ -60,13 +60,23 @@ namespace Ideas.Controllers
                 List<gIdea> IdeaList = await DbContext.Ideas.AsNoTracking()
                                                             .Include(i => i.CategoriesToIdeas)
                                                             .Include(i => i.Author)
-                                                            .Where(i => CatTagId == 0 ? i.CategoriesToIdeas.Any() : i.CategoriesToIdeas.Any(ci => ci.CategoryId == CatTagId))
-                                                            .Where(i => DepId == 0 ? i.Author.Department.Id > 0 : i.Author.Department.Id == DepId)
-                                                            .Where(i => RoleId == 0 ? i.Author.Role.Id > 0 : i.Author.Role.Id == RoleId)
-                                                            .Where(i => ideaStatus == gAppConst.AllRecords ? i.Status.Any() : i.Status.Contains(ideaStatus))
-                                                            .Where(i => i.CreatedDate.Year == submissionYear 
-                                                                     && !i.Author.IsBlocked && isAuthorAnon == gAppConst.AllRecords ? true : i.IsAnonymous.ToString().Equals(isAuthorAnon, StringComparison.CurrentCultureIgnoreCase)
-                                                                     && !i.IsBlocked)
+                                                            .ThenInclude(a=> a.Department)
+                                                            .Include(i => i.Author)
+                                                            .ThenInclude(a=> a.Role)
+                                                            .Where(i => i.CreatedDate.Year == submissionYear)
+                                                            .Where(i=> categoryTagId.Equals(gAppConst.AllRecords,StringComparison.CurrentCultureIgnoreCase) ?
+                                                                                            (i.CategoriesToIdeas.Any()
+                                                                                            || !i.CategoriesToIdeas.Any()) :
+                                                                    i.CategoriesToIdeas.Any(ci => ci.CategoryId == CatTagId))
+                                                            .Where(i => ideaStatus.Equals(gAppConst.AllRecords,StringComparison.CurrentCultureIgnoreCase) ?
+                                                                                          i.Status.Any() : i.Status.Contains(ideaStatus,StringComparison.CurrentCultureIgnoreCase))
+                                                            .Where(i => isAuthorAnon.Equals(gAppConst.AllRecords,StringComparison.CurrentCultureIgnoreCase) ?
+                                                                                            (i.IsAnonymous || !i.IsAnonymous) : 
+                                                                                            (i.IsAnonymous.ToString().Equals(isAuthorAnon,StringComparison.CurrentCultureIgnoreCase)))
+                                                            .Where(i => departmentId.Equals(gAppConst.AllRecords, StringComparison.CurrentCultureIgnoreCase) ?
+                                                                                            i.Author.Department.Id > 0 : i.Author.Department.Id == DepId)
+                                                            .Where(i => roleId.Equals(gAppConst.AllRecords, StringComparison.CurrentCultureIgnoreCase) ?
+                                                                                            i.Author.Role.Id > 0 : i.Author.Role.Id == RoleId)
                                                             .ToListAsync()
                                                             .ConfigureAwait(false);
 
@@ -86,7 +96,7 @@ namespace Ideas.Controllers
                 /// return the list of ideas
                 return Ok(IdeaList);
             }
-            catch (Exception)
+            catch (Exception eee)
             {
                 /// in the case any exceptions return the following error
                 gAppConst.Error(ref ErrorsList, "Server Error. Please Contact Administrator.");
@@ -113,7 +123,6 @@ namespace Ideas.Controllers
                 gIdea idea = await DbContext.Ideas.Include(i=> i.Author)
                                                   .Include(i=> i.CategoriesToIdeas)
                                                   .Include(i=> i.Comments)
-                                                  .Include(i=> i.Documents)
                                                   .Include(i=> i.FlaggedIdeas)
                                                   .FirstOrDefaultAsync(i => i.Id == ideaId )
                                                   .ConfigureAwait(false);
@@ -171,19 +180,27 @@ namespace Ideas.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
         [Authorize(gAppConst.AccessPolicies.LevelFour)] /// Done MUST BE TESTED
-        public async Task<IActionResult> Post([FromBody] gIdea newIdea)
+        public async Task<IActionResult> Post([FromBody] dynamic test)
         {
             try
             {
+                gIdea newIdea = (gIdea)test;
                 int.TryParse(User.Claims.FirstOrDefault(c => c.Type == "UserId").Value, out int userId);
-                newIdea.Author = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == userId).ConfigureAwait(false);
+                newIdea.Author = await DbContext.Users.Include(u => u.Role)
+                                                      .Include(u => u.Department)
+                                                      .FirstAsync(u => u.Id == userId)
+                                                      .ConfigureAwait(false);
+
                 newIdea.Status = gAppConst.IdeaStatus.Pending;
                 newIdea.CreatedDate = DateTime.UtcNow;
 
-                gClosureDates closureDates = await DbContext.ClosureDates.FirstOrDefaultAsync().ConfigureAwait(false);
+                gClosureDates closureDates = await DbContext.ClosureDates.FindAsync(newIdea.CreatedDate.Year).ConfigureAwait(false);
+
+
+
                 newIdea.FirstClosureDate = DateTime.UtcNow.AddDays(closureDates.FirstClosure);
                 newIdea.ClosureDate = DateTime.UtcNow.AddDays(closureDates.FinalClosure);
-
+                ModelState.Clear();
                 /// if model validation failed
                 if (!TryValidateModel(newIdea))
                 {
@@ -202,7 +219,7 @@ namespace Ideas.Controllers
                 /// and success message
                 return Created("Success", newIdea);
             }
-            catch (Exception) // DbUpdateException, DbUpdateConcurrencyException
+            catch (Exception ee) // DbUpdateException, DbUpdateConcurrencyException
             {
                 /// Add the error below to the error list and return bad request
                 gAppConst.Error(ref ErrorsList, "Server Error. Please Contact Administrator.");

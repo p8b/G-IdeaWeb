@@ -106,11 +106,11 @@ export const getBrowserStatistics = () => {
             errors: []
         };
         try {
-            const response = await apiCaller.get("authentication/browserStatistics");
+            const response = await apiCaller.get("authentication/get/browserStatistics");
             switch (response.status) {
                 case 200: // Ok Response
                     await response.json().then(data => {
-                        state.BrowserStatistics = data;
+                        state.browserStatistics = data;
                     }).catch(e => { console.log(e) })
                     break;
                 case 400: //Bad Response

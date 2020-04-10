@@ -37,6 +37,9 @@ namespace gIdeas.Models
         #endregion
         public string ShortDescription { get; set; }
 
+       
+        public string FileBlobStringBase64 { get; set; }
+
         #region **** Attributes: nvarchar(30), Required ***
         [Column(TypeName = "nvarchar(30)")]
         [DataType(DataType.DateTime)]
@@ -63,8 +66,8 @@ namespace gIdeas.Models
         [Required(ErrorMessage ="A user must be assigned to the idea")]
         public gUser Author { get; set; }
 
-        [ForeignKey("IdeaId")]
-        public List<gDocument> Documents { get; set; }
+        //[ForeignKey("IdeaId")]
+        //public List<gDocument> Documents { get; set; }
 
         [JsonIgnore]
         public bool IsBlocked { get; set; } = false;
@@ -80,7 +83,11 @@ namespace gIdeas.Models
         public ICollection<gVotes> Votes { get; set; }
 
         [ForeignKey("IdeaId"), Column(Order = 0)]
+        [JsonIgnore]
         public ICollection<gCategoriesToIdeas> CategoriesToIdeas { get; set; }
+
+        [NotMapped]
+        public List<gCategoryTag> CategoryTags { get; set; }
 
         [NotMapped]
         public int TotalThumbUps { get; set; }

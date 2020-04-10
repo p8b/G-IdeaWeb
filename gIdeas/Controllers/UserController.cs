@@ -57,22 +57,17 @@ namespace gIdeas.Controllers
                 /// populate the list to be returned
                 if (string.IsNullOrWhiteSpace(searchValue))
                 {
-                     await DbContext.Users.AsNoTracking()
+                    userList = await DbContext.Users.AsNoTracking()
                                           .Include(u => u.Department)
                                           .Include(u => u.Role)
                                           .Where(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id == DepartmentID)
                                           .Where(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id == RoleID)
-                                          .ForEachAsync(u =>
-                                          {
-                                              u.TotalNumberOfIdeas = DbContext.Ideas.AsNoTracking().Count(i => i.Author == u);
-                                              u.TotalNumberOfComments = DbContext.Comments.AsNoTracking().Count(i => i.User == u);
-                                              userList.Add(u);
-                                          })
+                                          .ToListAsync()
                                           .ConfigureAwait(false);
                 }
                 else
                 {
-                    await DbContext.Users.AsNoTracking()
+                    userList = await DbContext.Users.AsNoTracking()
                                          .Include(u => u.Department)
                                          .Include(u => u.Role)
                                          .Where(u => u.Id == userId
@@ -81,17 +76,14 @@ namespace gIdeas.Controllers
                                                   || u.Email.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
                                          .Where(u => departmentId == gAppConst.AllRecords ? u.Department.Id > 0 : u.Department.Id == DepartmentID)
                                          .Where(u => roleId == gAppConst.AllRecords ? u.Role.Id > 0 : u.Role.Id == RoleID)
-                                         .ForEachAsync( u =>
-                                         {
-                                             u.TotalNumberOfIdeas = DbContext.Ideas.Count(i => i.Author == u);
-                                             u.TotalNumberOfComments = DbContext.Comments.Count(i => i.User == u);
-                                             userList.Add(u);
-                                         })
+                                         .ToListAsync()
                                          .ConfigureAwait(false);
                 }
-
-                ;
-
+                foreach (var u in userList)
+                {
+                    u.TotalNumberOfIdeas = await DbContext.Ideas.Include(i=> i.Author).CountAsync(i => i.Author.Id == u.Id).ConfigureAwait(false);
+                    u.TotalNumberOfComments = await DbContext.Comments.Include(i => i.User).CountAsync(i => i.User.Id == u.Id).ConfigureAwait(false);
+                }
                 /// return the list of Role ordered by name
                 return Ok(userList);
             }
@@ -258,7 +250,7 @@ namespace gIdeas.Controllers
             try
             {
                 /// if the user with the same id is not found
-                gUser user = await DbContext.Users.FindAsync(userId).ConfigureAwait(false);
+                gUser user = await DbContext.Users.Include(u=> u.Role).Include(u=> u.Department).FirstAsync(u=> u.Id == userId).ConfigureAwait(false);
                 if (user == null)
                 {
                     gAppConst.Error(ref ErrorsList, "User not found");
@@ -267,9 +259,9 @@ namespace gIdeas.Controllers
 
                 user.IsBlocked = isBlocked;
 
+                ModelState.Clear();
                 /// Try to validate the model
-                TryValidateModel(user);
-                if (!ModelState.IsValid)
+                if (!TryValidateModel(user))
                 {
                     /// extract the errors and return bad request containing the errors
                     gAppConst.ExtractErrors(ModelState, ref ErrorsList);

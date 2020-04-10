@@ -59,7 +59,7 @@ namespace gIdeas.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         #endregion
-        [HttpGet("get/statistics")]
+        [HttpGet("[action]")]
         [Authorize(gAppConst.AccessPolicies.LevelOne)]  /// Done
         public async Task<IActionResult> GetStatistics()
         {

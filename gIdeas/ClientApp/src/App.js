@@ -38,7 +38,7 @@ const App = () => {
             {/** Switch used to navigate between the pages */}
             <Switch>
                 {/** Unprotected Routes */}
-                <CustomRoute exact path='/' Render={(props) => <ViewIdea {...props} />} />
+                <CustomRoute exact path='/' Render={(props) => <Home {...props} />} />
                 <CustomRoute exact path='/Login' Render={(props) => <Login {...props} />} />
                 <CustomRoute exact path='/TeamMembers' Render={(props) => <TeamMembers {...props} />} />
                 <CustomRoute exact path='/Logout' Render={(props) => <Logout {...props} />} />

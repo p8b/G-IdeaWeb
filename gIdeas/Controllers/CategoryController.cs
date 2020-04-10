@@ -74,7 +74,7 @@ namespace gIdeas.Controllers
                 }
 
                 /// check the database to see if a department with the same name exists
-                if (!await DbContext.Categories.AnyAsync(d => d.Name == newCategory.Name).ConfigureAwait(false))
+                if (await DbContext.Categories.AnyAsync(d => d.Name == newCategory.Name).ConfigureAwait(false))
                 {
                     /// extract the errors and return bad request containing the errors
                     gAppConst.Error(ref ErrorsList, "Category already exists.");

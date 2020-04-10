@@ -1,17 +1,16 @@
-﻿import React, { PureComponent } from 'react';
+﻿import React, { PureComponent } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Container } from 'reactstrap';
-import RecordPageView from "../../components/RecordPageView";
+import { postSubmitPageView } from "../Actions/PageViewActions";
 
-class PageNotFound extends PureComponent {
+class RecordPageView extends PureComponent {
+    async componentDidMount() {
+        await this.props.postSubmitPageView(this.props.IdeaId);
+    }
+    /// Render component method
     render() {
         return (
-            <Container>
-                {/* Record Page view of current page */}
-                <RecordPageView IdeaId="0" />
-                <div className="page-header">404 PageNotFoundFound</div>
-            </Container>
+            <div/>
         );
     }
 }
@@ -22,9 +21,11 @@ const mapStateToProps = (state) => {
 };
 /// Map actions (which may include dispatch to redux store) to component
 const mapDispatchToProps = {
+    postSubmitPageView
 }
 /// Redux Connection before exporting the component
 export default connect(
     mapStateToProps,
     dispatch => bindActionCreators(mapDispatchToProps, dispatch)
-)(PageNotFound);
+)(RecordPageView);
+

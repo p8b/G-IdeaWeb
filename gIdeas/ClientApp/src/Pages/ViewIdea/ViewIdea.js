@@ -4,11 +4,13 @@ import { bindActionCreators } from 'redux';
 import { Container, Row, Card, CardText, CardBody, CardTitle, CardSubtitle } from 'reactstrap';
 import CommentBox from './CommentBox';
 import "./CommentBox.css";
+import RecordPageView from "../../components/RecordPageView";
 
 class ViewIdea extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            IdeaId:1,
             count: 0
         }
 
@@ -27,6 +29,8 @@ class ViewIdea extends PureComponent {
     render() {
         return (
             <Container className="pb-container">
+                {/* Record Page view of current page */}
+                <RecordPageView IdeaId={this.state.IdeaId} />
                 <div className="page-header">Single Idea</div>
                     <Card>
                         <CardBody>

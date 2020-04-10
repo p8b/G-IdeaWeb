@@ -33,7 +33,6 @@ namespace gIdeas.Controllers
             UserManager = um;
         }
 
-
         #region *** 200 OK, 400 BadRequest ***
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

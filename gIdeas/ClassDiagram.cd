@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="gIdeas.Models.AuthManager&lt;TUser&gt;" Collapsed="true">
+    <Position X="16.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Models\AuthManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gAppDbContext" Collapsed="true">
+    <Position X="14.75" Y="0.5" Width="5.75" />
+    <TypeIdentifier>
+      <HashCode>QCIAAAAAAAAAAAAAACAAIAAIEgCAEAACAAAEAAAAIAA=</HashCode>
+      <FileName>Models\gAppDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gCategoriesToIdeas">
+    <Position X="15.5" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAiAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gCategoriesToIdeas.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gCategoryTag">
+    <Position X="18" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gCategoryTag.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gClosureDates">
+    <Position X="16.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAABAAAAAAAAAAAAAAAAAAAEQAAAA=</HashCode>
+      <FileName>Models\gClosureDates.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gComment">
+    <Position X="9.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAgAgACAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gComment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gDepartment">
+    <Position X="2.25" Y="5.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAgAAAAQBAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Models\gDepartment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gDocument">
+    <Position X="16.5" Y="5.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAACAIAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gDocuments.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gFlaggedIdea">
+    <Position X="9.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAgACAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Models\gFlaggedIdea.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gIdea">
+    <Position X="12" Y="4.75" Width="1.75" />
+    <AssociationLine Name="Votes" Type="gIdeas.Models.gVotes" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.75" Y="5.541" />
+        <Point X="13.875" Y="5.541" />
+        <Point X="13.875" Y="5.032" />
+        <Point X="14.75" Y="5.032" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.11" Y="0.027" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>ACICAAAEAggABEAQgAAAIIAIAAAAAgACAgQAAAAAIAA=</HashCode>
+      <FileName>Models\gIdea.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Documents" />
+      <Property Name="CategoriesToIdeas" />
+      <Property Name="Votes" />
+      <Property Name="Comments" />
+      <Property Name="FlaggedIdeas" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="gIdeas.Models.gLoginRecord">
+    <Position X="2.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAACAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gLoginRecord.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gBrowser">
+    <Position X="9.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gLoginRecord.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gPageView">
+    <Position X="12" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gPageView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gRole">
+    <Position X="2.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAACAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gRoles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.Models.gUser">
+    <Position X="5.75" Y="3.5" Width="2.25" />
+    <AssociationLine Name="Ideas" Type="gIdeas.Models.gIdea" FixedToPoint="true">
+      <Path>
+        <Point X="8" Y="7.912" />
+        <Point X="12" Y="7.912" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>QACCAEAABCgAIEAIEBAAIAABVACAAgAIARQABAAAIQA=</HashCode>
+      <FileName>Models\gUser.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Department" />
+      <Property Name="Role" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="LoginRecords" />
+      <Property Name="Ideas" />
+      <Property Name="FlaggedIdeas" />
+      <Property Name="Comments" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="gIdeas.Models.gVotes">
+    <Position X="14.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAgAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\gVotes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.gAppConst">
+    <Position X="11.25" Y="9.25" Width="2" />
+    <NestedTypes>
+      <Struct Name="gIdeas.gAppConst.AccessClaims" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>gAppConst.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="gIdeas.gAppConst.AccessPolicies" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>gAppConst.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="gIdeas.gAppConst.IdeaStatus" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>gAppConst.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAgACAAAAAAAQAAAAAAAAEAAAAAAAAAABBRAAAAAAA=</HashCode>
+      <FileName>gAppConst.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="gIdeas.gError">
+    <Position X="13.5" Y="9.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>gAppConst.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

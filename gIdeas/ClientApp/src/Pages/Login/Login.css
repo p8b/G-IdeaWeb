@@ -79,23 +79,6 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
     }
 
-.login-button {
-    background: rgb(96, 110, 178);
-    border: 0;
-    padding: 12.24px 28.8px;
-    color: #FFFFFF;
-    float: right;
-    font-size: 14.4px;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-    .login-button:hover,
-    .login-button:active,
-    .login-button:focus {
-        background: rgb(46, 46, 46);
-    }
 
 .google-login {
     height: 50px;

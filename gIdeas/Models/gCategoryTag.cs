@@ -13,7 +13,7 @@ namespace gIdeas.Models
         [Required(ErrorMessage ="Name is required!")]
         public string Name { get; set; }
 
-        [ForeignKey("CategoryId"), Column(Order = 0)]
+        [NotMapped]
         public ICollection<gCategoriesToIdeas> Ideas { get; set; }
     }
 }

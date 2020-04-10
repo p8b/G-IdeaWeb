@@ -7,11 +7,13 @@ import thunk from 'redux-thunk';
 
 /// Reducer imports
 import AuthenticationReducer from './AuthenticationReducer';
+import SelectedIdeaReducer from './SelectedIdeaReducer';
 
 /// Combining all the reducers to be added to redux store
 const allReducers = combineReducers(
     {
         Authentication: AuthenticationReducer,
+        SelectedIdea: SelectedIdeaReducer,
     });
 
 /// Create store to be exported

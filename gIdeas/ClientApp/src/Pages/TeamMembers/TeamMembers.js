@@ -2,6 +2,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container } from 'reactstrap';
+import RecordPageView from "../../components/RecordPageView";
 
 class TeamMembers extends PureComponent {
     constructor(props) {
@@ -16,6 +17,8 @@ class TeamMembers extends PureComponent {
     render() {
         return (
             <Container>
+                {/* Record Page view of current page */}
+                <RecordPageView IdeaId="0" />
                 <div className="page-header">Team Members</div>
             </Container>
         );

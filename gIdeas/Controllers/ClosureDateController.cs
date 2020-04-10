@@ -59,9 +59,12 @@ namespace gIdeas.Controllers
         {
             try
             {
-                
-                gClosureDates currentClosureDates = await DbContext.ClosureDates.FirstAsync(c => c.Year ==  newClosureDates.Year).ConfigureAwait(false);
-
+                gClosureDates currentClosureDates = null;
+                try
+                {
+                    currentClosureDates = await DbContext.ClosureDates.FirstAsync(c => c.Year == newClosureDates.Year).ConfigureAwait(false);
+                }
+                catch (Exception) { }
                 if (currentClosureDates == null)
                 {
                     await DbContext.ClosureDates.AddAsync(newClosureDates).ConfigureAwait(false);
@@ -76,9 +79,9 @@ namespace gIdeas.Controllers
                 /// save the changes to the data base
                 await DbContext.SaveChangesAsync().ConfigureAwait(false);
                 /// return 200 ok status
-                return Ok();
+                return Ok(currentClosureDates);
             }
-            catch (Exception) // DbUpdateException, DbUpdateConcurrencyException
+            catch (Exception eee) // DbUpdateException, DbUpdateConcurrencyException
             {
                 /// Add the error below to the error list and return bad request
                 gAppConst.Error(ref ErrorsList, "Server Error.Please Contact Administrator.");

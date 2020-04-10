@@ -1,0 +1,138 @@
+﻿.mainContainer {
+    border: 2px solid black;
+    border-radius: 8px;
+}
+
+.mainCard {
+    margin: auto;
+    border: 0.00002rem solid black;
+    border-radius: 0;
+    /*box-shadow: 10px 10px 10px 10px rgba(0,0,0,0.40);*/
+    
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.mainCard-date {
+    margin: -75px 300px 50px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.mainCard-title {
+    margin: auto 395px auto;
+    text-align: center;
+}
+
+.card-Footer {
+    bottom: 0;
+}
+
+.mainCard-left {
+    margin: auto 50px 50px;
+    text-align: left;
+    float: left;
+}
+
+.mainCard-right {
+    margin: -75px 600px 50px;
+    text-align: right;
+    float: right;
+}
+
+.side-bar{
+    background: rgb(96, 110, 178) !important; /*button colour*/
+}
+.hide-overflow{
+    overflow:hidden;
+}
+.side-bar-dropdown{
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: all 0.3 ease !important;
+    -webkit-transition: all 0.3 ease !important;
+}
+.form-button1 { /*text within button colour*/
+    text-transform: uppercase !important;
+    outline: 0 !important;
+    width: 80% !important;
+    margin: auto !important;
+}
+
+.form-button2 { /*text within button colour*/
+    text-transform: uppercase !important;
+    outline: 0 !important;
+    background: rgb(96, 110, 178) !important; /*button colour*/
+    width: 80% !important;
+    margin: auto !important;
+    border: 0 !important;
+    padding: 15px !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    -webkit-transition: all 0.3 ease !important;
+    transition: all 0.3 ease !important;
+    cursor: pointer !important;
+}
+
+.form-button3 { /*text within button colour*/
+    text-transform: uppercase !important;
+    outline: 0 !important;
+    background: rgb(96, 110, 178) !important; /*button colour*/
+    width: 80% !important;
+    margin: auto !important;
+    border: 0 !important;
+    padding: 15px !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    -webkit-transition: all 0.3 ease !important;
+    transition: all 0.3 ease !important;
+    cursor: pointer !important;
+}
+
+.form-button4 { /*text within button colour*/
+    text-transform: uppercase !important;
+    outline: 0 !important;
+    background: rgb(96, 110, 178) !important; /*button colour*/
+    width: 80% !important;
+    margin: auto !important;
+    border: 0 !important;
+    padding: 15px !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    -webkit-transition: all 0.3 ease !important;
+    transition: all 0.3 ease !important;
+    cursor: pointer !important;
+}
+
+.form-button5 { /*text within button colour*/
+    text-transform: uppercase !important;
+    outline: 0 !important;
+    background: rgb(96, 110, 178) !important; /*button colour*/
+    width: 80% !important;
+    margin: auto !important;
+    border: 0 !important;
+    padding: 15px !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    -webkit-transition: all 0.3 ease !important;
+    transition: all 0.3 ease !important;
+    cursor: pointer !important;
+}
+
+.form-button6 { /*text within button colour*/
+    text-transform: uppercase !important;
+    outline: 0 !important;
+    background: rgb(96, 110, 178) !important; /*button colour*/
+    width: 80% !important;
+    margin: auto !important;
+    border: 0 !important;
+    padding: 15px !important;
+    color: #FFFFFF !important;
+    font-size: 14px !important;
+    -webkit-transition: all 0.3 ease !important;
+    transition: all 0.3 ease !important;
+    cursor: pointer !important;
+}

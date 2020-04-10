@@ -10,6 +10,9 @@ body {
     background-color: rgb(246, 246, 246);
     font-family: "Lato", Helvetica, Arial, sans-serif;
 }
+.custom-container {
+    padding-bottom: 10rem;
+}
 html {
     font-size: 14px;
 }
@@ -130,6 +133,15 @@ html {
         max-width: 125px;
     }
 }
+.my-profile {
+    font-family: "Antonio", Verdana, sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.1;
+    text-rendering: optimizelegibility;
+    margin-top: auto;
+    margin-bottom: auto;
+}
 .text-underline {
     text-decoration-line: underline;
 }
@@ -163,3 +175,20 @@ html {
 .m-shadow-box {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.58);
 }
+.login-button {
+    background: rgb(96, 110, 178);
+    border: 0;
+    padding: 12.24px 28.8px;
+    color: #FFFFFF !important;
+    float: right;
+    font-size: 14.4px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .login-button:hover,
+    .login-button:active,
+    .login-button:focus {
+        background: rgb(46, 46, 46);
+    }

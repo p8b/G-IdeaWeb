@@ -64,11 +64,15 @@ namespace gIdeas.Controllers
                 try
                 {
                     requestedPageName = referer[3];
+                    if (string.IsNullOrWhiteSpace(requestedPageName))
+                        requestedPageName = "Home";
                 }
                 catch (Exception) { }
-
-                gPageView currentPageView = await DbContext.PageViews.FirstAsync(p => p.PageName.Equals(requestedPageName, StringComparison.CurrentCultureIgnoreCase)).ConfigureAwait(false);
-
+                gPageView currentPageView = null;
+                try
+                {
+                    currentPageView = await DbContext.PageViews.FirstAsync(p => p.PageName.Equals(requestedPageName, StringComparison.CurrentCultureIgnoreCase)).ConfigureAwait(false);
+                }catch (Exception){}
                 if (currentPageView == null)
                 {
                     currentPageView = new gPageView { PageName = requestedPageName, PageCount = 1 };

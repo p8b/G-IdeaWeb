@@ -1,5 +1,6 @@
 ﻿
-import { apiCaller } from '../_MainApp/appConst';
+import { apiCaller } from '../components/_MainApp/appConst';
+import { gError } from '../components/_MainApp/Models';
 
 export const getAllPageViews = () => {
     return async dispatch => {

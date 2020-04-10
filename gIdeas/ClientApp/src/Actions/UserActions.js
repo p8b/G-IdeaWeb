@@ -1,10 +1,10 @@
 ﻿import { AllRecords, apiCaller } from '../components/_MainApp/appConst';
-import { gUser } from '../components/_MainApp/Models';
+import { gUser, gError } from '../components/_MainApp/Models';
 
 export const getSearchUser = (roleId = AllRecords, departmentId = AllRecords, searchValue = "") => {
     return async dispatch => {
         let state = {
-            Users: [],
+            userList: [],
             errors: [],
         };
         try {
@@ -12,7 +12,7 @@ export const getSearchUser = (roleId = AllRecords, departmentId = AllRecords, se
             switch (response.status) {
                 case 200: // Ok Response
                     await response.json().then(data => {
-                        state.Users = data;
+                        state.userList = data;
                     }).catch(e => { console.log(e) })
                     break;
                 case 400: //Bad Response

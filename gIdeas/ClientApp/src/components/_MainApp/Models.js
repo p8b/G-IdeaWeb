@@ -1,29 +1,26 @@
-﻿export class gCategoryToIdeas {
-    CategoryId = 0;
-    IdeaId = 0;
+﻿//export class gCategoryToIdeas {
+//    CategoryId = 0;
+//    IdeaId = 0;
 
-    constructor(categoryToIdeas = {
-        categoryId : 0,
-        ideaId : 0,
-    }) {
-        this.CategoryId = categoryToIdeas.categoryId;
-        this.IdeaId = categoryToIdeas.ideaId;
-    }
-}
+//    constructor(categoryToIdeas = {
+//        categoryId : 0,
+//        ideaId : 0,
+//    }) {
+//        this.CategoryId = categoryToIdeas.categoryId;
+//        this.IdeaId = categoryToIdeas.ideaId;
+//    }
+//}
 
 export class gCategoryTag {
     Id = 0;
     Name = "";
-    CategoriesToIdeas = [];
 
     constructor(categoryTag = {
         id: 0,
-        name: "",
-        categoriesToIdeas: [],
+        name: ""
     }) {
         this.Id = categoryTag.id;
         this.Name = categoryTag.name;
-        this.CategoriesToIdeas = categoryTag.categoriesToIdeas;
     }
 }
 
@@ -144,12 +141,13 @@ export class gIdea {
     ClosureDate = new Date();
     IsAnonymous = false;
     ViewCount = 0;
-    Autor = new gUser();
-    Documents = [];
+    Autor = "";
+    FileBlobStringBase64 = "";
+    //Documents = [];
     Comments = [];
     FlaggedIdeas = [];
     Votes = [];
-    CategoriesToIdeas = [];
+    CategoryTags = [];
     TotalThumbUps = 0;
     TotalThumbDowns = 0;
 
@@ -163,12 +161,12 @@ export class gIdea {
         closureDate : new Date(),
         isAnonymous : false,
         viewCount : 0,
-        autor : new gUser(),
-        documents :[],
+        autor : "",
+        fileBlobStringBase64 :"",
         comments :[],
         flaggedIdeas : [],
         votes :[],
-        categoriesToIdeas :[],
+        categoryTags :[],
         totalThumbUps : 0,
         totalThumbDowns : 0,
     }) {
@@ -182,11 +180,11 @@ export class gIdea {
         this.IsAnonymous = idea.isAnonymous;
         this.ViewCount = idea.viewCount;
         this.Author = new gUser(idea.author);
-        this.Documents = idea.documents;
+        this.FileBlobStringBase64 = idea.fileBlobStringBase64;
         this.Comments = idea.comments;
         this.FlaggedIdeas = idea.flaggedIdeas;
         this.Votes = idea.votes;
-        this.CategoriesToIdeas = idea.categoriesToIdeas;
+        this.CategoryTags = idea.categoryTags;
         this.TotalThumbUps = idea.totalThumbUps;
         this.TotalThumbDowns = idea.totalThumbDowns;
     }

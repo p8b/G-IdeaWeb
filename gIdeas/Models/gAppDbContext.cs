@@ -16,7 +16,7 @@ namespace gIdeas.Models
         public DbSet<gCategoryTag> Categories { get; set; }
         public DbSet<gDepartment> Departments { get; set; }
         public DbSet<gComment> Comments { get; set; }
-        public DbSet<gDocument> Documents { get; set; }
+        //public DbSet<gDocument> Documents { get; set; }
         public DbSet<gFlaggedIdea> FlaggedIdeas { get; set; }
         public DbSet<gIdea> Ideas { get; set; }
         public DbSet<gVotes> Votes { get; set; }
@@ -51,6 +51,8 @@ namespace gIdeas.Models
 
             builder.Entity<gUser>().HasMany(u => u.Comments).WithOne(c=>c.User).OnDelete(DeleteBehavior.ClientSetNull);
             builder.Entity<gUser>().HasMany(u => u.FlaggedIdeas).WithOne(f => f.User).OnDelete(DeleteBehavior.ClientSetNull);
+
+            builder.Entity<gClosureDates>().Property(c => c.Year).ValueGeneratedNever();
             #region *** Remove unnecessary attributes form IdentityUser class ***
             builder.Entity<gUser>().Ignore(u => u.EmailConfirmed);
             builder.Entity<gUser>().Ignore(u => u.LockoutEnabled);

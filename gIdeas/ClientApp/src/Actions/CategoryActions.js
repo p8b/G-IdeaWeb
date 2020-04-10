@@ -1,18 +1,21 @@
 ﻿import { apiCaller } from '../components/_MainApp/appConst';
 import { gCategoryTag, gError } from '../components/_MainApp/Models';
 
-export const getAllCategories= () => {
+export const getAllCategories = () => {
     return async dispatch => {
         let state = {
             categories: [],
-            errors:[]
+            errors: []
         };
         try {
             const response = await apiCaller.get("Category/get");
             switch (response.status) {
                 case 200: // Ok Response
                     await response.json().then(data => {
-                        state.categories = data;
+                        console.log(data)
+                        data.map(category => {
+                            state.categories.push(new gCategoryTag(category));
+                        })
                     }).catch(e => { })
                     break;
                 case 400: //Bad Response

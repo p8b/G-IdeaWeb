@@ -8,11 +8,11 @@ export const getAllDepartments = () => {
             errors: []
         };
         try {
-            const response = await apiCaller.get("api/departments/get");
+            const response = await apiCaller.get("department/get");
             switch (response.status) {
                 case 200: // Ok Response
                     await response.json().then(data => {
-                        state.AllDepartments = data;
+                        state.Departments = data;
                     }).catch(e => { console.log(e) })
                     break;
                 case 400: //Bad Response
@@ -39,16 +39,17 @@ export const getDepartmentStatistics = () => {
             errors: []
         };
         try {
-            const response = await apiCaller.get("department/get/statistics");
+            const response = await apiCaller.get("department/GetStatistics");
+            console.log(response);
             switch (response.status) {
                 case 200: // Ok Response
                     await response.json().then(data => {
-                        state.DepartmentStatistics = getDepartmentStatistics(data);
+                        state.DepartmentStatistics = data;
                     }).catch(e => { console.log(e) })
                     break;
                 case 400: //Bad Response
                     await response.json().then(data => {
-                        state.errors =  data;
+                        state.errors = data;
                     }).catch(e => { console.log(e) })
                     break;
                 default:
@@ -59,7 +60,6 @@ export const getDepartmentStatistics = () => {
             console.log(e)
             state.errors.push(new gError({ key: "ConnectionError", value: "Server Connection Error" }))
         }
-        dispatch(state);
         return state;
     }
 }
@@ -96,7 +96,7 @@ export const postDepartment = (department = new gDepartment()) => {
 }
 
 
-export const deleteDepartment = (department = new ) => {
+export const deleteDepartment = (department = new gDepartment()) => {
     return async dispatch => {
         let state = {
             isDeleted: false,
