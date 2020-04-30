@@ -5,7 +5,7 @@
   "dependencies": {
     "base64-arraybuffer": "0.2.0",
     "bootstrap": "^4.3.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jszip": "^3.2.2",
     "multiselect-react-dropdown": "^1.4.7",
     "react": "^16.12.0",
